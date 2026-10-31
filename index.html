@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>引き際の迷宮</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -481,6 +482,14 @@ button.card.found.tap:active{transform:translateY(2px);box-shadow:0 2px 0 var(--
 @keyframes ciHop{from{transform:translateY(0)}to{transform:translateY(-26px)}}
 .ci-critters .ci-stage img{opacity:0;transform:scale(.8);animation:ciGrow .5s ease-out 1.35s forwards}
 
+/* 名もなき拳闘士：見えない拳が3発、画面を殴りつけてから現れる */
+.ci-bout{--bg0:#120806;--bgOp:1;--c:#6b2a1c;--bandAt:2.05s}
+.ci-bout .ci-wrap{animation:ciShake .22s linear .3s,ciShake .22s linear .75s,ciShake .3s linear 1.2s}
+.ci-hit{width:120px;height:120px;margin:-60px 0 0 -60px;background:radial-gradient(circle,#fff 0 18%,#ffd9a8 30%,transparent 62%);clip-path:polygon(50% 0,61% 34%,98% 22%,70% 50%,98% 78%,61% 66%,50% 100%,39% 66%,2% 78%,30% 50%,2% 22%,39% 34%);opacity:0;animation:ciHit .45s ease-out var(--d) forwards}
+@keyframes ciHit{0%{opacity:0;transform:scale(.2) rotate(0)}15%{opacity:1;transform:scale(1.2) rotate(8deg)}100%{opacity:0;transform:scale(1.6) rotate(14deg)}}
+.ci-bout .ci-stage img{opacity:0;transform:scale(1.4);animation:ciPunchIn .35s cubic-bezier(.2,1.4,.5,1) 1.4s forwards}
+@keyframes ciPunchIn{to{opacity:1;transform:scale(1)}}
+
 /* 踏破：金色の帯ときらめき */
 .ci-banner{--bg0:#0b0905;--bgOp:.85;--c:#a8801f}
 .ci-big{position:absolute;left:0;right:0;top:36%;display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0;animation:ciPop .6s cubic-bezier(.2,1.4,.5,1) .3s forwards;padding-inline:max(16px,env(safe-area-inset-left,0px))}
@@ -563,6 +572,20 @@ button.card.found.tap:active{transform:translateY(2px);box-shadow:0 2px 0 var(--
 .npc.todon{align-items:flex-start}
 .npc .say{display:flex;flex-direction:column;gap:4px}
 .npc .say p{margin:0}
+.dopts{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.dstat{list-style:none;margin:6px 0;padding:0;display:grid;gap:4px}
+.dstat li{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dotted rgba(255,255,255,.12);padding:2px 0}
+.dacts{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.dact{display:flex;gap:6px;align-items:stretch}
+.dact .act{flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left}
+.dact .act .an{white-space:nowrap;display:flex;gap:6px;align-items:center}
+.dact .btn{flex:0 0 auto}
+.dlog p{margin:2px 0;font-size:.85rem}
+.tag.fw{background:#c4553e;color:#fff}
+.tag.fr{background:#4a6fa8;color:#fff}
+.ver{margin:2px 0 0;font-size:.7rem;opacity:.55;letter-spacing:.05em}
+.patch{margin:4px 0 10px;padding-left:1.2em}
+.patch li{margin:3px 0;font-size:.9rem;line-height:1.5}
 </style>
 
 <div id="app" class="app"></div>
@@ -605,18 +628,18 @@ const SPR = {
     "....ktTk....",
     "....kkkk...."],
   axe:[
-    "......kk....",
-    "..kkk.kTk...",
-    ".kMMmkkTk...",
-    "kMMmmxkTk...",
-    "kMmmmxkTk...",
-    "kMmmmxkTk...",
-    ".kmmxkkTk...",
-    "..kkk.kTk...",
-    "......kTk...",
-    "......kTk...",
-    "......kTk...",
-    "......kkk..."],
+    "..kkk.......",
+    ".kMMmkk.....",
+    ".kMmmmxk.kk.",
+    ".kMmmmmxkTTk",
+    ".kMmmmxkTTk.",
+    ".kMmmxkTTk..",
+    ".kMMkkTTk...",
+    "..kk.kTk....",
+    "....kTk.....",
+    "...kGk......",
+    "..kGk.......",
+    "..kk........"],
   bow:[
     ".......kk...",
     "......kMmw..",
@@ -1021,6 +1044,32 @@ const SPR = {
     "..kTTk......",
     ".kTTk.......",
     ".kkk........"],
+  fangnk:[
+    "..y......y..",
+    "...y....y...",
+    "....yyyy....",
+    "...kkkkkk...",
+    "...kQQqqk...",
+    "...kQQqqk...",
+    "....kQqqk...",
+    "....kQqk....",
+    ".....kqk....",
+    ".....kuk..n.",
+    "......k..nN.",
+    ".........N.."],
+  flametube:[
+    "........yo..",
+    ".......yoro.",
+    "......kyrry.",
+    ".....kMkoy..",
+    "....kMmxk...",
+    "...kMmxk....",
+    "..kMmxk.....",
+    ".kTmxk......",
+    "kTTxk.......",
+    "kTTk........",
+    ".kk.........",
+    "............"],
   flute:[
     ".....kk.....",
     "....kQqk....",
@@ -1245,6 +1294,57 @@ const SPR = {
     ".ksskbbb",
     "..kkkkkk"]},
   // ---------- monsters 16x16 (mirrored) ----------
+  scarecrow:{m:1,r:[
+    "......kk",
+    ".....kTT",
+    "....kTTT",
+    "..kkkkkk",
+    "....kttt",
+    "....ktkt",
+    "....kttt",
+    "kkkkkkty",
+    "yTTTTkry",
+    "kkkkkrrr",
+    "....krrr",
+    "....kryr",
+    "....kyyy",
+    ".....kyy",
+    "......kT",
+    "......kT"]},
+  smithdad:{m:1,r:[
+    "....kkkk",
+    "...kssss",
+    "..kssswl",
+    "..kSssss",
+    ".kSkkkss",
+    ".kSsswks",
+    ".kSsssSs",
+    "..kSsGGG",
+    "..kGGGGG",
+    "..kkGGGG",
+    ".kSSkGGk",
+    "kSssSkTT",
+    "kSsSsTTT",
+    "kSsSsTyT",
+    "kSssSTTT",
+    "kkkkkkkk"]},
+  smithgirl:{m:1,r:[
+    "....kkkk",
+    "..kkRRRR",
+    ".kRRRoRR",
+    ".kRkkkkk",
+    "kRRkcwck",
+    "kRRkkkkk",
+    "kRRsssss",
+    "kRRsswks",
+    "kRRsssss",
+    "kRRseess",
+    "kRRsssks",
+    ".kRRsssk",
+    "..kkTTss",
+    ".kTTTyTT",
+    ".kTTTTTT",
+    ".kkkkkkk"]},
   rat:{m:1,r:[
     "........",
     "..kkk...",
@@ -1523,6 +1623,38 @@ SPR.greedking = recolor('mimic', {t:'y', T:'Y', Y:'o', R:'P', r:'p'});
 SPR.shadowking = recolor('shadow', {P:'G', p:'g', c:'r'});
 SPR.witch = recolor('shadow', {P:'N', p:'n', c:'e'});
 SPR.goldbox = recolor('chest', {t:'y', T:'Y', Y:'o'});
+/* 拳闘士の拳布（唯一の拳の武器） */
+SPR.fist = [
+  "............",
+  ".kkkkkkkkk..",
+  "kwwkwwkwwkk.",
+  "kwwkwwkwwkwk",
+  "kllkllkllkwk",
+  "kwwwwwwwwkwk",
+  "ksssssskkwwk",
+  "kSSSSSSkwwk.",
+  ".kkkkkkwwk..",
+  "..krrrrrrk..",
+  "..kwwwwwwk..",
+  "..kkkkkkkk.."];
+/* 試しの地下牢の主：名もなき拳闘士 */
+SPR.boxer = {m:1, r:[
+  "........",
+  "....kkkk",
+  "...kTTTT",
+  "...krrrr",
+  "kkkkskks",
+  "kwwkssks",
+  "kwlkssss",
+  "kllkkSsR",
+  "kkkk.kSS",
+  ".kskkSss",
+  ".kssSsss",
+  ".kSssSss",
+  "..kSsSsS",
+  "..kYYYYY",
+  "..kRRRkR",
+  "..kkkk.k"]};
 /* 宝箱開封屋トドン：鳥の被り物、肩にインコ */
 SPR.todon = [
   "......r..r......",
@@ -1567,6 +1699,10 @@ const TINT = {
   copper:{m:'#c27a3e',M:'#eeaa6c',x:'#7a4423'}, iron:{m:'#8c929b',M:'#c6ccd4',x:'#545961'},
   steel:{m:'#93aec6',M:'#dbe8f3',x:'#566b80'}, silver:{m:'#d4d8e0',M:'#ffffff',x:'#888e9a'},
   arcane:{m:'#8a68d4',M:'#c9b4ff',x:'#4a347a'},
+  dragonw:{m:'#2b1d40',M:'#8a5ad0',x:'#100a18'},
+  bossw_bstaff:{m:'#4a3f5c',M:'#8a7aa8',x:'#1b1620'},
+  bossw_bwhip:{m:'#9a62e0',M:'#e2c4ff',x:'#55348f'},
+  bossw_bdagger:{m:'#d8a83a',M:'#fff1a8',x:'#8a6418'},
   cedar:{m:'#c08f5a',M:'#e2b783',x:'#7e5833'}, oak:{m:'#9a6a3e',M:'#c4945f',x:'#5c3c21'},
   ebony:{m:'#5a4740',M:'#8a756e',x:'#2c201d'}, spirit:{m:'#77b5a3',M:'#bde8da',x:'#427062'},
   world:{m:'#d6c068',M:'#fff0a6',x:'#8c7c30'},
@@ -1594,7 +1730,14 @@ const WEAPONS = {
   staff: {n:'杖',   spr:'staff',  mat:'wood',  atk:5, wt:3, ins:1, sk:['fire','heal']},
   dagger:{n:'短剣', spr:'dagger', mat:'metal', atk:3, wt:2, ins:4, sk:['stab','steal']},
   whip:  {n:'鞭',   spr:'whip',   mat:'metal', atk:4, wt:2, ins:2, sk:['lash','bind']},
+  /* 唯一の拳の武器：試しの地下牢の主が必ず落とす。身ひとつ（袋が軽いほど攻撃が上がる）と王者の気迫（当てるほど強くなる）を持つ */
+  flame: {n:'火筒', spr:'flametube', mat:'metal', atk:5, wt:4, ins:0, sk:['flamebreath','firewall'], unique:'龍肺の火筒', anyone:true},
+  fist:  {n:'拳布', spr:'fist',   mat:'metal', atk:4.5, wt:1, ins:3, sk:['jab','sabaki'], unique:'拳闘士の拳布'},
 };
+const weaponPool = () => Object.keys(WEAPONS).filter(k => !WEAPONS[k].unique);
+function makeFist() { const n = pickW({0:25, 1:45, 2:30}); return makeWeapon('fist', 5, n > 0 ? boxAffixes('w', +n) : []); }
+/* 身ひとつ：袋の中身が空なら攻撃+50%。袋の重さが持てる重さの半分に近づくほど下がり、半分を超えると0 */
+function bareBonus(S) { if (!D) return 0; return .5 * Math.max(0, 1 - listWeight(D.bag) / (S.cap * .5)); }
 /* 技の性質：攻め・守り・かわし・崩し */
 const TYPE_N = {atk:'攻め', guard:'守り', dodge:'かわし', brk:'崩し'};
 const SKILLS = {
@@ -1606,10 +1749,14 @@ const SKILLS = {
   cleave:  {n:'叩き割る',   type:'brk',   mult:.9,   acc:.92, d:'構えごと叩き割る'},
   shoot:   {n:'退き撃ち',   type:'dodge', own:.5,    acc:.97, d:'下がりながら射る。少し当てられる'},
   snipe:   {n:'狙い撃つ',   type:'brk',   mult:.9,   acc:.95, d:'構えの隙間を射抜く'},
-  fire:    {n:'炎',         type:'brk',   mult:1,    acc:1, magic:true, d:'炎で構えを焼き崩す。守りを無視'},
+  fire:    {n:'炎',         type:'brk',   mult:1,    acc:1, magic:true, el:'fire', d:'炎で構えを焼き崩す。守りを無視。火の属性'},
+  flamebreath:{n:'炎を吐く', type:'atk', mult:.7, acc:1, magic:true, aoe:true, el:'fire', d:'火筒から炎を吐き、敵全体を焼く。守りを無視。火の属性'},
+  firewall:{n:'火の壁',     type:'guard', wall:.1, burn:.35, d:'炎の壁で受け止め、殴ってきた相手を焼く。火の属性'},
   heal:    {n:'癒しの結界', type:'guard', heal:.15,  d:'結界で受けつつ体力を回復。同じ戦いで使うたびに効き目が落ちる'},
   stab:    {n:'刺す',       type:'atk',   mult:.9,   acc:.97, crit:.2, d:'急所を狙いやすい'},
   steal:   {n:'盗む',       type:'dodge', steal:true, d:'身をかわしつつ懐を探る'},
+  jab:     {n:'連打',       type:'atk',   mult:.6,   acc:.95, hits:2, d:'拳を2発たたき込む'},
+  sabaki:  {n:'捌き',       type:'dodge', own:.5,    acc:.97, d:'攻撃を捌きながら、拳を返す。少し当てられる'},
   lash:    {n:'打つ',       type:'atk',   mult:1,    acc:.95, d:'しなる一撃'},
   bind:    {n:'縛る',       type:'brk',   mult:.5,   acc:.9, bind:true, d:'絡め取って動きを止める（同じ敵には効きにくくなる）'},
   punch:   {n:'殴る',       type:'atk',   mult:1,    acc:.95, d:'素手で殴る'},
@@ -1633,7 +1780,7 @@ const HEART_SKILLS = {
   golem:{n:'岩の守り', type:'guard', wall:.3, counterMul:1.3, d:'岩のように受け止める。受ける傷が減り、反撃も重い'},
   mimic:{n:'丸呑み', type:'atk', mult:.9, acc:.95, swallow:.25, d:'弱った敵（体力25%以下）を丸呑みにすることがある'},
   executioner:{n:'処刑の刃', type:'atk', mult:1, acc:.95, execute:.4, d:'体力40%以下の敵に2倍の傷'},
-  dragon:{n:'竜の息吹', type:'atk', mult:.75, acc:1, magic:true, aoe:true, d:'黒い炎で敵全体を焼く。守りを無視'},
+  dragon:{n:'竜の息吹', type:'atk', mult:.75, acc:1, magic:true, aoe:true, el:'fire', d:'黒い炎で敵全体を焼く。守りを無視。火の属性'},
 };
 for (const t in HEART_SKILLS) SKILLS['h_' + t] = {...HEART_SKILLS[t], hk:t};
 /* こころのレベルに合わせて技を強める */
@@ -1668,13 +1815,18 @@ const ACCS = {
   pack:    {n:'運び屋の背負い袋', spr:'pack',              stat:'cap',     d:'持てる重さ'},
   luck:    {n:'幸運の金貨',     spr:'coin',                stat:'luck',    d:'拾う金貨'},
   flute:   {n:'魔物使いの笛',   spr:'flute',    gem:'white', stat:'tame',    d:'こころの入手率'},
+  fangnk:  {n:'毒牙の首飾り',   spr:'fangnk',     gem:'white', stat:'venom',   d:'攻撃で敵を毒にする確率'},
 };
 const ACC_GRADE = ['', '上質な', '見事な', '至高の', '伝説の'];
 const AFFIX = {
   fire:    {n:'燃える',   on:'w',  wt:3,   d:'攻撃のたびに炎の追加傷'},
   vamp:    {n:'吸血の',   on:'w',  wt:2,   d:'与えた傷の15%だけ体力を回復'},
   keen:    {n:'鋭い',     on:'w',  wt:3,   d:'急所に当たる確率 +15%（急所は1.5倍の傷）'},
-  venom:   {n:'毒の',     on:'w',  wt:2,   d:'当たると30%で敵を毒にする'},
+  greed:   {n:'金運の',   on:'wa', wt:0,   d:'拾う金貨 +30%、行商人の値段 −20%'},
+  shade:   {n:'影縫いの', on:'wa', wt:0,   d:'敵の狡猾さ −4。構えが読みやすくなる'},
+  hands:   {n:'千手の',   on:'w',  wt:0,   d:'攻撃が当たると25%で、見えない手が追い打ち（攻撃の半分の傷）'},
+  grit:    {n:'不屈の',   on:'a',  wt:0,   d:'体力が3割以下のとき、攻撃 +30%・受ける傷 −20%'},
+  venom:   {n:'毒の',     on:'w',  wt:2,   d:'当たると50%で敵を毒にする（入ったときにも傷）。毒の敵にまた入ると猛毒・劇毒・死毒と強まり、敵の攻撃も段階ごとに5%弱まる'},
   heavy:   {n:'重い',     on:'w',  wt:2,   d:'攻撃 ×1.25、ただし重さ ×1.5'},
   sturdy:  {n:'頑丈な',   on:'a',  wt:3,   d:'防御 ×1.3'},
   regen:   {n:'再生の',   on:'a',  wt:2,   d:'進むたび・探すたびに最大体力の4%回復'},
@@ -1726,6 +1878,17 @@ const MATS = {
   abyssdragon:{n:'冥王竜の逆鱗',spr:'scale',tint:'red',val:900},
   mimic:{n:'ミミックの舌',spr:'cloth',tint:'pink',val:40},
   executioner:{n:'処刑人の頭巾',spr:'cloth',tint:'gray',val:90},
+  greedking:{n:'強欲の金歯',spr:'fang',tint:'gold',val:160},
+  shadowking:{n:'影王の外套',spr:'cloth',tint:'black',val:160},
+  witch:{n:'魔女の呪布',spr:'cloth',tint:'purple',val:160},
+  boxer:{n:'闘士の拳帯',spr:'cloth',tint:'red',val:200},
+  /* 竜の部位：竜を倒すたびに1つ（深層では2〜3つ）。村で竜の武器を作るのに使う */
+  dfang:{n:'竜の牙',spr:'fang',tint:'white',val:150, dragon:1},
+  dclaw:{n:'竜の爪',spr:'fang',tint:'gray',val:150, dragon:1},
+  dlung:{n:'竜の肺',spr:'orb',tint:'red',val:150, dragon:1},
+  dhorn:{n:'竜の角',spr:'fang',tint:'brown',val:150, dragon:1},
+  deye:{n:'竜の瞳',spr:'orb',tint:'gold',val:150, dragon:1},
+  dwhisker:{n:'竜の髭',spr:'cloth',tint:'gold',val:150, dragon:1},
 };
 
 /* ---------- 魔物のこころ ---------- */
@@ -1763,12 +1926,20 @@ const DUNGEONS = {
   1:{n:'始まりの迷宮', floors:10, gate:5, boss:'golem', last:'dragon', off:0, gateFT:'gate', lastFT:'abyss'},
   2:{n:'黄昏の深淵',   floors:12, gate:6, boss:'colossus', last:'abyssdragon', off:8, gateFT:'gate2', lastFT:'abyss2'},
   3:{n:'底なしの深層', floors:Infinity, gate:0, boss:null, last:null, off:8, endless:true},
+  4:{n:'試しの地下牢', floors:15, gate:0, boss:null, last:'boxer', off:0, mids:[5, 10], lastFT:'arena', prison:true},
 };
+/* 試しの地下牢：何も持ち込めない。敵は始まりの迷宮の魔物で、15階でも始まりの9階相当までしか強くならない */
+const PRISON = {merchSplit:7, merchEarly:.4, merchLate:1.6, vd:4 / 7, xp:1.5, kehai:.7, itemMul:2, matMul:.5, potionP:.25, floorHeal:.08, midBoss:['greedking', 'shadowking', 'witch'], bossHp:2.0, bossAtk:.65};
+const prisonVD = depth => 1 + (depth - 1) * PRISON.vd;
+const vdOf = (dg, depth) => dg === 3 ? abyssVD(depth) : dg === 4 ? prisonVD(depth) : depth;
+const poolDg = dg => dg === 3 ? 2 : dg === 4 ? 1 : dg;
+const hardDg = dg => dg === 2 || dg === 3;
 const DG = () => DUNGEONS[(D && D.dg) || 1];
-const ED = () => D.dg === 3 ? Math.round(8 + abyssVD(D.depth)) : D.depth + DG().off;
+const ED = () => D.dg === 3 ? Math.round(8 + abyssVD(D.depth)) : D.dg === 4 ? Math.round(prisonVD(D.depth)) : D.depth + DG().off;
 function REC(dg) {
   if (dg === 2) { G.d2 = G.d2 || {best:0, gateKills:0, cleared:false, clears:0}; return G.d2; }
   if (dg === 3) { G.d3 = G.d3 || {best:0}; return G.d3; }
+  if (dg === 4) { G.d4 = G.d4 || {best:0, cleared:false, clears:0}; return G.d4; }
   return G;
 }
 
@@ -1802,6 +1973,7 @@ const MON = {
   greedking:{d:2, n:'強欲の王',   spr:'greedking',  boss:1, hp:640, atk:38, def:13, xp:150, g:600, ai:'heavy'},
   shadowking:{d:2, n:'影の王',     spr:'shadowking', boss:1, hp:560, atk:44, def:11, xp:150, g:300, ai:'magic'},
   witch:    {d:2, n:'千手の魔女',  spr:'witch',      boss:1, hp:520, atk:36, def:10, xp:150, g:300, ai:'magic'},
+  boxer:    {n:'名もなき拳闘士', spr:'boxer', boss:1, hp:200, atk:18, def:6, xp:0, g:400, ai:'charge'},
   mimic:   {n:'ミミック',   spr:'mimic',    ai:'basic'},
   executioner:{n:'徘徊する処刑人', spr:'executioner', ai:'charge'},
   ghostknight:{n:'亡霊の騎士', spr:'ghostknight', ai:'heavy'},
@@ -1824,6 +1996,8 @@ const STANCE = {
   feint: {chip:'構え崩し', t:'盾ごと叩き割ろうと、低く構えている！', mult:1.4, atk:1, verb:'構え崩し', danger:1},
   plunder:{chip:'強奪', t:'袋に手を伸ばしてくる…', mult:.8, atk:1, verb:'強奪の手'},
   summon: {chip:'召喚', t:'足元に魔法陣が広がっていく…', mult:0},
+  dummy: {chip:'棒立ち', t:'ただ立っている', mult:0},
+  echo:  {chip:'二重詠唱', t:'断ち切ったはずの呪文が、まだ響いている！', mult:1.5, atk:1, magic:1, verb:'残響の呪文', danger:1},
 };
 /* 守りを崩す構えを使う強い敵（TUNE.feint のときだけ） */
 const FEINT_W = {orc:1, minotaur:2, knight:2, executioner:2, golem:1, darkskel:1, oni:2, obsidian:2, beast:1, colossus:2, ghostknight:2};
@@ -1845,7 +2019,8 @@ const STANCE_W = {
   ghostknight:{strike:3, heavy:3, guard:2, charge:2, drain:1},
   greedking:{strike:3, heavy:2, guard:2, plunder:3},
   shadowking:{spell:3, heavy:2, drain:2, feint:2, guard:1},
-  witch:{spell:3, summon:3, strike:2, guard:1},
+  witch:{spell:3, summon:3, heavy:2, guard:1}, dummy:{dummy:1},
+  boxer:{rapid:4, feint:3, strike:2, charge:2},
   abyssdragon:{inhale:3, heavy:3, rapid:2, spell:2},
 };
 /* 技の性質 × 敵の構え → 与える傷の倍率・受ける傷の倍率・反撃など */
@@ -1858,13 +2033,14 @@ function matchup(type, st, boss) {
     if (st === 'feint') r.take = .5;
   } else if (type === 'guard') {
     if (st === 'feint') { r.take = 1.5; }
-    else if (st === 'heavy' || st === 'smash' || st === 'drain') {
+    else if (st === 'drain') r.take = 1;
+    else if (st === 'heavy' || st === 'smash') {
       r.counter = 1;
       r.take = TUNE.gImpact ? (st === 'smash' ? (boss ? TUNE.gSmashBoss : TUNE.gSmash) : TUNE.gHeavy) : (st === 'smash' && boss ? .15 : 0);
     }
-    else if (A) r.take = TUNE.gImpact ? Math.min(1, ({strike:.5, rapid:.6, poison:.6, spell:.7, breath:.6})[st] ?? .5) + TUNE.gMiss : (({strike:.5, rapid:.6, poison:.6, spell:.7, breath:.6})[st] ?? .5);
+    else if (A) r.take = TUNE.gImpact ? Math.min(1, ({strike:.5, rapid:.6, poison:.6, spell:.7, echo:.5, breath:.6})[st] ?? .5) + TUNE.gMiss : (({strike:.5, rapid:.6, poison:.6, spell:.7, echo:.5, breath:.6})[st] ?? .5);
   } else if (type === 'dodge') {
-    if (st === 'rapid' || st === 'poison' || st === 'breath' || st === 'plunder') { r.take = 0; r.counter = .9; }
+    if (st === 'rapid' || st === 'poison' || st === 'breath' || st === 'plunder' || st === 'drain') { r.take = 0; r.counter = .9; }
     else if (A) r.take = ({heavy:0, smash:boss ? .3 : 0, strike:.5, drain:.5, spell:.6, feint:.6})[st] ?? .5;
   } else if (type === 'brk') {
     r.deal = A ? .5 : 1;
@@ -1876,12 +2052,12 @@ function matchup(type, st, boss) {
   if (r.interrupt && st !== 'steal') r.take = 0;
   return r;
 }
-const BEST = {plunder:'dodge', summon:'brk', feint:'atk', strike:'atk', heavy:'guard', smash:'guard', drain:'guard', rapid:'dodge', poison:'dodge', breath:'dodge', guard:'brk', charge:'brk', inhale:'atk', spell:'brk', steal:'brk', stagger:'atk'};
+const BEST = {dummy:'atk', echo:'guard', plunder:'dodge', summon:'brk', feint:'atk', strike:'atk', heavy:'guard', smash:'guard', drain:'dodge', rapid:'dodge', poison:'dodge', breath:'dodge', guard:'brk', charge:'brk', inhale:'atk', spell:'brk', steal:'brk', stagger:'atk'};
 const TIPS = [
   ['atk', '通常の攻撃と打ち合う。溜めている相手やよろめいた相手、構え崩しを狙う相手には大きく当たる'],
-  ['guard', '強攻撃・溜め撃ち・吸い取りを受け止めて反撃する。受けても少し傷は残る。続けて守るほど崩れやすく、構え崩しには弱い'],
-  ['dodge', '連撃・毒・ブレスをかわして反撃する'],
-  ['brk', '防御・溜め・詠唱を崩して隙を作る。攻撃してくる相手には半分しか当たらない（門番と主の溜めは崩せない）'],
+  ['guard', '強攻撃・溜め撃ちを受け止めて反撃する（吸い取りは受け止められない）。受けても少し傷は残る。続けて守るほど崩れやすく、構え崩しには弱い'],
+  ['dodge', '連撃・毒・ブレス・吸い取りをかわして反撃する。続けすぎると疲れて、かわしにくくなる'],
+  ['brk', '防御・溜め・詠唱を崩して隙を作る。攻撃してくる相手には半分しか当たらない（門番と主の溜めは崩せない）。3回以上続けると読まれて、止められないことがある'],
 ];
 
 /* ---------- 迷宮の階の種類 ---------- */
@@ -1897,6 +2073,8 @@ const FT = {
   abyssgate:{n:'深層の門', spr:'stairs', w:[30,20,15,10,5,10,0,5,5,0], b:[2,2], enter:'巨大な門の前に、何者かが待ち構えている。', hint:'門の向こうから、ただならぬ気配がする'},
   gate2:   {n:'巨像の間', spr:'colossus', w:[30,20,15,10,5,10,0,5,5,0], b:[2,2], enter:'黒い石の巨像が、崩れた門を塞いでいる。', hint:'岩が擦れるような音がする'},
   abyss2:  {n:'冥府の底', spr:'abyssdragon', w:[40,20,20,10,0,10,0,0,0,0], b:[2,2], enter:'赤黒い炎の向こうで、冥王竜が目を開けた。', hint:'焼けつくような熱気が吹き上げてくる'},
+  cell:    {n:'牢番の間', spr:'stairs', w:[30,20,15,10,5,10,0,5,5,0], b:[2,2], enter:'鉄格子の扉の前に、何者かが居座っている。', hint:'鎖の擦れる音が近づいてくる'},
+  arena:   {n:'闘技の間', spr:'boxer', w:[40,20,20,10,0,10,0,0,0,0], b:[2,2], enter:'すり減った石の闘技場の真ん中で、素手の男が拳を固めている。', hint:'拳が肉を打つ、重い音が響いてくる'},
   abyss:   {n:'最深部',   spr:'dragon',   w:[40,20,20,10,0,10,0,0,0,0], b:[2,2], enter:'底知れない闇の奥で、巨大な何かが眠っている。', hint:'凍りつくような息づかいが聞こえる'},
 };
 
@@ -1912,7 +2090,7 @@ const heroKey = () => (D && D.hero) || G.hero || 'kai';
 const HERO_OF = k => HEROES[k] || HEROES.kai;
 function canWield(it, hk = heroKey()) {
   if (!it) return true;
-  if (HERO_OF(hk).onlyWhip && it.k === 'weapon' && it.type !== 'whip') return false;
+  if (HERO_OF(hk).onlyWhip && it.k === 'weapon' && it.type !== 'whip' && !(WEAPONS[it.type] && WEAPONS[it.type].anyone)) return false;
   if (it.k === 'heart' && HEARTS[it.type] && HEARTS[it.type].tamerOnly && hk !== 'tamer') return false;
   return true;
 }
@@ -1924,7 +2102,7 @@ const TRAIN = {
   cap:{n:'荷運びの訓練', d:'持てる重さ +6', v:6,  cost:75},
   ins:{n:'見切りの稽古', d:'洞察 +3',       v:3,  cost:90},
 };
-const BUYBACK_MULT = 4;
+const BUYBACK_MULT = 2;
 
 /* =========================================================
    道具の生成と性能
@@ -1935,13 +2113,20 @@ function makeArmor(type, aff = []) { return {id:uid(), k:'armor', type, aff, plu
 function makeAcc(type, tier) { return {id:uid(), k:'acc', type, tier}; }
 function makeCons(type) { return {id:uid(), k:'cons', type}; }
 function makeMat(type) { return {id:uid(), k:'mat', type}; }
+/* ボス・中ボス・竜の素材：売るときは2回押させる */
+function isBossMat(it) { return !!(it && it.k === 'mat' && MATS[it.type] && (MATS[it.type].dragon || (MON[it.type] && MON[it.type].boss))); }
 function makeHeart(type, lv = 1) { return {id:uid(), k:'heart', type, lv}; }
 function makeTreasure(type, depth) {
   const t = TREAS[type];
   return {id:uid(), k:'treasure', type, val: Math.round(t.val * .7 * (1 + (depth - 1) * .25) * (.85 + R() * .3))};
 }
 function tierFor(depth) {
-  if (D && D.dg >= 2) { let t = D.dg === 3 || D.depth > DUNGEONS[2].gate ? 6 : 5; if (chance(.15)) t--; return t; }
+  if (D && D.dg === 3) {
+    /* 深層：黄昏の深淵の何階相当かで決める。黄昏の最深部を越えたら、質の落ちる確率が下がっていく */
+    const vd = abyssVD(D.depth); let t = vd > DUNGEONS[2].gate ? 6 : 5;
+    if (chance(vd > DUNGEONS[2].floors ? Math.max(.03, .15 - .01 * (vd - DUNGEONS[2].floors)) : .15)) t--; return t;
+  }
+  if (D && hardDg(D.dg)) { let t = D.depth > DUNGEONS[2].gate ? 6 : 5; if (chance(.15)) t--; return t; }
   let t = clamp(Math.ceil(depth / 2), 1, 5);
   if (chance(.15)) t--;
   return clamp(t, 1, 5);
@@ -1966,9 +2151,9 @@ function rollAffixes(on, depth, opt = {}) {
 }
 function randomGear(depth, opt = {}) {
   const kind = opt.kind || pickW({weapon:45, armor:35, acc:20});
-  let t = clamp(tierFor(depth) + (opt.tierUp || 0), 1, opt.maxTier || (D && D.dg >= 2 ? 6 : 5));
+  let t = clamp(tierFor(depth) + (opt.tierUp || 0), 1, opt.maxTier || (D && hardDg(D.dg) ? 6 : 5));
   if (kind === 'weapon') {
-    const type = pick(Object.keys(WEAPONS));
+    const type = pick(weaponPool());
     return makeWeapon(type, t, rollAffixes('w', depth, opt));
   }
   if (kind === 'armor') {
@@ -1997,7 +2182,7 @@ function quality(v, it) {
   return q ? Math.max(v * (1 + .1 * q), v + q) : v;
 }
 function weaponAtk(it) {
-  const base = WEAPONS[it.type].atk * TIER_MULT[it.tier - 1];
+  const base = WEAPONS[it.type].atk * TIER_MULT[it.tier - 1] * (it.dw || it.bw ? DRAGON_W_MUL : 1);
   let a = quality(base, it);
   if (has(it,'heavy')) a *= 1.25;
   if (has(it,'cursed')) a *= 1.35;
@@ -2022,6 +2207,7 @@ function accAmount(it) {
     case 'cap': return 4 * t;
     case 'luck': return Math.round(12 * t);
     case 'tame': return Math.round((1.2 + .4 * t) * 10) / 10;
+    case 'venom': return 8 * t;
   }
   return 0;
 }
@@ -2040,6 +2226,7 @@ function itemWt(it) {
 }
 function affF(it) { let f = 1; for (const a of (it.aff || []).concat(it.ench ? [it.ench] : [])) f *= a === 'cursed' ? 1.1 : a === 'master' ? 1.5 : 1.35; return f; }
 function itemVal(it) {
+  if (it.issued) return 0;
   switch (it.k) {
     case 'weapon': return Math.round(16 * Math.pow(TIER_MULT[it.tier - 1], 1.4) * affF(it) * (1 + .3 * it.plus));
     case 'armor':  return Math.round((8 + ARMORS[it.type].def * 7) * affF(it) * (1 + .3 * it.plus));
@@ -2061,7 +2248,7 @@ function itemName(it) {
   const pre = (it.ench ? [it.ench] : []).concat(it.aff || []).map(a => AFFIX[a].n).join('');
   const plus = it.plus ? ` +${it.plus}` : '';
   switch (it.k) {
-    case 'weapon': return pre + matOf(it).n + 'の' + WEAPONS[it.type].n + plus;
+    case 'weapon': return pre + (it.dw ? DRAGON_W[it.dw].n : it.bw ? BOSS_W[it.bw].n : WEAPONS[it.type].unique || matOf(it).n + 'の' + WEAPONS[it.type].n) + plus;
     case 'armor': return pre + ARMORS[it.type].n + plus;
     case 'acc': return ACC_GRADE[it.tier - 1] + ACCS[it.type].n;
     case 'cons': return CONS[it.type].n;
@@ -2072,9 +2259,18 @@ function itemName(it) {
   }
   return '？';
 }
+/* 竜の武器：黒曜石のように、刃に紫と黒のまだらを散らした絵を作る */
+function obsSpr(n) {
+  const k = n + '_obs';
+  if (typeof SPR === 'undefined' || SPR[k] || !SPR[n]) return SPR && SPR[k] ? k : n;
+  const src = Array.isArray(SPR[n]) ? SPR[n] : SPR[n].r;
+  const rows = src.map((row, y) => row.replace(/[mM]/g, (c, x) => { const h = (x * 7 + y * 11 + x * y) % 7; return h === 0 ? 'M' : h === 3 || h === 5 ? 'x' : 'm'; }));
+  SPR[k] = Array.isArray(SPR[n]) ? rows : {...SPR[n], r:rows};
+  return k;
+}
 function itemSpr(it) {
   switch (it.k) {
-    case 'weapon': return [WEAPONS[it.type].spr, matOf(it).t];
+    case 'weapon': return [it.dw ? obsSpr(WEAPONS[it.type].spr) : WEAPONS[it.type].spr, it.dw ? 'dragonw' : it.bw ? 'bossw_' + it.bw : WEAPONS[it.type].unique ? '' : matOf(it).t];
     case 'armor': return ['armor', ARMORS[it.type].tint];
     case 'acc': return [ACCS[it.type].spr, ACCS[it.type].gem || ''];
     case 'cons': return [CONS[it.type].spr, CONS[it.type].tint || ''];
@@ -2097,6 +2293,8 @@ function rarity(it) {
 const KIND_N = {weapon:'武器', armor:'防具', acc:'装飾品', cons:'道具', treasure:'宝', mat:'素材', heart:'魔物のこころ', rare:'秘宝'};
 function itemLines(it) {
   const L = [];
+  if (it.loan) L.push('試しの地下牢の入口で借りた装備。帰るときに返す');
+  else if (it.issued) L.push('町の支給品。売っても0金貨');
   if (it.k === 'weapon') {
     const plain = weaponAtk({...it, aff:[], ench:null}), now = weaponAtk(it);
     L.push(now !== plain ? `攻撃 ${now}（付与効果なしなら ${plain}）` : `攻撃 ${now}`);
@@ -2104,6 +2302,10 @@ function itemLines(it) {
     const ins = (WEAPONS[it.type].ins || 0) + (has(it, 'sight') ? 3 + it.tier : 0);
     if (ins) L.push(`洞察 ${ins > 0 ? '+' : ''}${ins}`);
     if (has(it,'fire')) L.push(`炎の追加傷 +${2 + 2 * it.tier}`);
+    if (it.dw) L.push(`竜の力：${DRAGON_W[it.dw].d}`);
+    if (it.bw) L.push(`王の力：${BOSS_W[it.bw].d}`);
+    if (it.type === 'flame') L.push('誰でも使える。炎を吐く（敵全体）と火の壁（守りながら焼く）');
+    if (it.type === 'fist') { L.push('身ひとつ：袋の中身が軽いほど攻撃が上がる（空なら+50%、持てる重さの半分を超えると0）'); L.push('王者の気迫：1発当てるたびに次の一撃+15%（最大+60%）。連打なら2発目から乗る。攻撃を受けると途切れる'); L.push('傭兵だけが使える'); }
   } else if (it.k === 'armor') {
     const plain = armorDef({...it, aff:[], ench:null}), now = armorDef(it);
     L.push(now !== plain ? `防御 ${now}（付与効果なしなら ${plain}）` : `防御 ${now}`);
@@ -2111,7 +2313,7 @@ function itemLines(it) {
     if (has(it, 'sight')) L.push(`洞察 +${3 + ARMORS[it.type].tier}`);
   } else if (it.k === 'acc') {
     const A = ACCS[it.type], v = accAmount(it);
-    L.push(A.stat === 'stealth' ? `気配のたまり方 -${v}%` : A.stat === 'luck' ? `拾う金貨 +${v}%` : A.stat === 'tame' ? `こころの入手率 ${v}倍` : `${A.d} +${v}`);
+    L.push(A.stat === 'stealth' ? `気配のたまり方 -${v}%` : A.stat === 'luck' ? `拾う金貨 +${v}%` : A.stat === 'tame' ? `こころの入手率 ${v}倍` : A.stat === 'venom' ? `攻撃で敵を毒にする確率 +${v}%（毒は重ねるほど強まる）` : `${A.d} +${v}`);
   } else if (it.k === 'cons') L.push(CONS[it.type].d);
   else if (it.k === 'rare') { L.push(RARES[it.type].d); if (RARES[it.type].box) { const p = boxPlace(it); L.push(`見つけた場所：${DUNGEONS[p.dg].n} 地下${p.fl}階${it.dg ? '' : 'あたり'}（深い迷宮・深い階ほど中身が良くなりやすい）`); } }
   else if (it.k === 'treasure') L.push('町で売ると金貨になる');
@@ -2161,7 +2363,7 @@ function calcStats(eq, ext = {}) {
     atk: B.atk + (lv - 1) + (tr.atk || 0) + (bl.atk || 0),
     def: B.def + Math.floor((lv - 1) / 2) + (tr.def || 0) + (bl.def || 0),
     agi: B.agi, cap: B.cap + (tr.cap || 0),
-    crit: .06, fire: 0, vamp: 0, venom: 0, kehaiMul: 1, regen: 0, thorns: 0, antidote: false, mag: 0, luck: 0,
+    crit: .06, fire: 0, vamp: 0, venom: 0, dwk: null, bwk: null, merchOff: 0, cunDown: 0, chase: 0, grit: false, kehaiMul: 1, regen: 0, thorns: 0, antidote: false, mag: 0, luck: 0,
     tame: 1, heart: null, hlv: 0, htp: 0, trapDodge: 0, fleeUp: 0, battleRegen: 0, foresee: 0, chestBonus: 0, eliteDown: 0,
     insight: 12 + lv + (tr.ins || 0) + (B.ins || 0), hearts:{}, htps:{}, hero:hk,
   };
@@ -2171,7 +2373,7 @@ function calcStats(eq, ext = {}) {
     if (has(w,'fire')) s.fire += 2 + 2 * w.tier;
     if (has(w,'vamp')) s.vamp += .15;
     if (has(w,'keen')) s.crit += .15;
-    if (has(w,'venom')) s.venom += .3;
+    if (has(w,'venom')) s.venom += .5;
     if (has(w,'quiet')) s.kehaiMul *= .7;
     if (has(w,'cursed')) s.kehaiMul *= 1.5;
   }
@@ -2194,6 +2396,7 @@ function calcStats(eq, ext = {}) {
       case 'cap': s.cap += v; break;
       case 'luck': s.luck += v / 100; break;
       case 'tame': s.tame *= v; break;
+      case 'venom': s.venom += v / 100; break;
     }
   }
   const hs = [eq.heart, H.hearts >= 2 ? eq.heart2 : null].filter(Boolean);
@@ -2227,6 +2430,12 @@ function calcStats(eq, ext = {}) {
   if (a && has(a,'sight')) s.insight += 3 + ARMORS[a.type].tier;
   if (!w) { s.atk += TUNE.fist; s.insight += 2; }
   const cu = ext.curse || {};
+  for (const x of [w, a]) if (x) {
+    if (has(x, 'greed')) { s.luck += .3; s.merchOff = Math.max(s.merchOff, .2); }
+    if (has(x, 'shade')) s.cunDown += 4;
+  }
+  if (w && has(w, 'hands')) s.chase = .25;
+  if (a && has(a, 'grit')) s.grit = true;
   if (cu.weak) s.atk = Math.max(1, Math.round(s.atk * .8));
   if (cu.frail) s.def = Math.round(s.def * .7);
   if (cu.loud) s.kehaiMul *= 1.5;
@@ -2234,6 +2443,10 @@ function calcStats(eq, ext = {}) {
   if (cu.heavy) s.cap -= 5;
   if (ext.child) { s.tame *= 1.5; s.kehaiMul *= 1.3; }
   s.skills = (w ? WEAPONS[w.type].sk : ['punch', 'brace']).slice();
+  if (w && w.type === 'fist') { s.bareFist = true; s.kiai = true; }
+  s.dwk = w && w.dw ? w.dw : null;
+  s.bwk = w && w.bw ? w.bw : null;
+  if (s.bwk === 'bstaff') { s.insight += 6; s.cunDown += 4; }
   if (H.hearts >= 2) for (const t in s.hearts) s.skills.push('h_' + t);
   return s;
 }
@@ -2282,6 +2495,7 @@ function shopCons() {
 function rollFloorType(depth, prev) {
   const dg = DG();
   if (dg.endless) { if (depth % 10 === 0) return 'abyssgate'; }
+  else if (dg.prison) { if (dg.mids.includes(depth)) return 'cell'; if (depth === dg.floors) return dg.lastFT; }
   else {
     if (depth === dg.gate) return dg.gateFT;
     if (depth === dg.floors) return dg.lastFT;
@@ -2338,19 +2552,24 @@ function applyPreset() {
 function startDive(dg = 1) {
   if (dg === 2 && !G.cleared) dg = 1;
   if (dg === 3 && !REC(2).cleared) dg = 1;
-  const presetMsgs = applyPreset();
+  if (dg === 4 && !G.cleared) dg = 1;
+  const prison = dg === 4;
+  const presetMsgs = prison ? [] : [...issueStarter(), ...applyPreset()];
   D = {
     dg, hero:G.hero || 'kai', depth:1, lv:1, xp:0, gold:0,
-    eq:{...G.load}, bag:G.pack.slice(), train:{...G.train}, bless:{},
+    eq:prison ? prisonLoan() : {...G.load}, bag:prison ? [] : G.pack.slice(), train:prison ? {} : {...G.train}, bless:{},
     kehai:0, poison:0, stand:true, gateDone:false, carried:0,
     mode:'floor', pending:[], scene:null, battle:null, retreat:null, ev:null,
     lastGate:0, gateClear:0, maxDepth:1, curse:{}, child:null,
   };
-  for (const k of SLOTS) if (D.eq[k]) D.eq[k].b = 1;
-  for (const it of D.bag) it.b = 1;
-  G.load = {weapon:null, armor:null, acc:null, heart:null, heart2:null};
-  G.pack = []; G.train = {}; G.buyback = null; G.dives++;
-  const carry = clamp(Math.floor(G.carry || 0), 0, G.gold);
+  if (!prison) {
+    for (const k of SLOTS) if (D.eq[k]) D.eq[k].b = 1;
+    for (const it of D.bag) it.b = 1;
+    G.load = {weapon:null, armor:null, acc:null, heart:null, heart2:null};
+    G.pack = []; G.train = {}; G.buyback = null;
+  } else { const a = PRISON.midBoss.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } D.midSeq = a.slice(0, 2); D.midDone = {}; }
+  G.dives++;
+  const carry = prison ? 0 : clamp(Math.floor(G.carry || 0), 0, G.gold);
   G.gold -= carry; D.gold = carry; D.carried = carry;
   if (D.hero === 'tamer' && D.eq.heart && D.eq.heart2 && D.eq.heart.lv >= 3 && D.eq.heart2.lv >= 3) unlock('duo3');
   /* 亡霊の騎士：始まりの迷宮を踏破したあと、潜行ごとに判定。ボスを倒すたびに出やすくなる */
@@ -2365,7 +2584,7 @@ function startDive(dg = 1) {
   rollNextBox();
   if (dg === 3 && !(G.d3 && G.d3.best)) cutinOnce('abyssIn');
   REC(dg).best = Math.max(REC(dg).best || 0, 1);
-  D.scene = {spr:FT[D.ftype].spr, title:`地下1階　${FT[D.ftype].n}`, lines:[...presetMsgs, `${DG().n}に足を踏み入れた。`, FT[D.ftype].enter]};
+  D.scene = {spr:FT[D.ftype].spr, title:`地下1階　${FT[D.ftype].n}`, lines:[...presetMsgs, ...(prison ? ['入口の番人に、町の装備も持ち物も金貨もすべて預けた。', `代わりに${itemName(D.eq.weapon)}と${itemName(D.eq.armor)}を借りた（帰るときに返す）。`] : []), `${DG().n}に足を踏み入れた。`, FT[D.ftype].enter]};
   G.dive = D; G.screen = 'dive';
 }
 
@@ -2402,6 +2621,12 @@ function deeper() {
     }
     advanceFloor([]); return;
   }
+  if (dg.mids && dg.mids.includes(D.depth) && !(D.midDone || {})[D.depth]) {
+    const k = D.midSeq[dg.mids.indexOf(D.depth)], e = spawnMidBoss(k, D.depth);
+    cutin(k);
+    D.scene = {spr:e.spr, title:`${e.name}が行く手を阻んでいる！`, lines:['倒さなければ、この先へは進めない。']};
+    startBattle(e, 'mid'); return;
+  }
   if (D.depth === dg.gate && !D.gateDone) {
     cutin(dg.boss);
     D.scene = {spr:MON[dg.boss].spr, title:`${MON[dg.boss].n}が動き出した！`, lines:['門番を倒さなければ、この先へは進めない。']};
@@ -2425,6 +2650,7 @@ function advanceFloor(pre) {
   D.fExp = 0; setBoxHere(!!D.nextBox, !!D.nextBoxSeen);
   rollNextBox();
   D.kehai = Math.max(0, D.kehai - 35);
+  if (D.dg === 4 && PRISON.floorHeal) { const S = pst(), h = Math.round(S.maxHp * PRISON.floorHeal); if (D.hp < S.maxHp) { D.hp = Math.min(S.maxHp, D.hp + h); pre = [...pre, `階段で一息ついた。体力が${h}回復した。`]; } }
   const f = FT[D.ftype];
   D.scene = {spr:f.spr, title:`地下${D.depth}階　${f.n}`, lines:[...pre, f.enter, ...(D.boxHint ? ['さっき見えた金色の光は、この階のどこかのようだ。'] : []), ...t]};
   D.mode = 'floor';
@@ -2459,7 +2685,7 @@ function explore() {
   const S = pst();
   if (D.track) D.track.explore = true;
   const t = actionTick(); if (!t) return;
-  const gain = Math.round((10 + rnd(6)) * S.kehaiMul);
+  const gain = Math.round((10 + rnd(6)) * S.kehaiMul * (D.dg === 4 ? PRISON.kehai : 1));
   D.kehai = Math.min(100, D.kehai + gain);
   if (D.kehai >= 100) {
     const e = spawnSpecial('executioner', ED());
@@ -2475,6 +2701,8 @@ function explore() {
   else {
     D.budget--;
     const w = {}; FT[D.ftype].w.forEach((v, i) => { if (v) w[EV_KEYS[i]] = v; });
+    if (w.merchant && merchantRich()) w.merchant *= MERCH_RICH.mul;
+    if (D.dg === 4) { if (w.treasure) w.treasure *= .5; w.fountain = (w.fountain || 0) * 1.8 + 4; if (w.merchant) w.merchant *= D.depth <= PRISON.merchSplit ? PRISON.merchEarly : PRISON.merchLate; }
     ev = pickW(w);
   }
   EVENTS[ev](t);
@@ -2621,6 +2849,24 @@ function evChoice(k) {
     startBattle(e, 'wander'); return;
   }
 }
+/* ---------- 町の支給品：武器も防具も手元にないときだけ、出発時に自動で渡す（売値0）。設定で止められる ---------- */
+function issueStarter() {
+  if (G.noIssue) return [];
+  const hk = G.hero || 'kai', home = [...G.wh, ...G.pack], got = [];
+  if (!G.load.weapon && !home.some(x => x.k === 'weapon' && canWield(x, hk))) {
+    const w = makeWeapon(HERO_OF(hk).onlyWhip ? 'whip' : 'sword', 1); w.issued = true; G.load.weapon = w; got.push(w);
+  }
+  if (!G.load.armor && !home.some(x => x.k === 'armor')) {
+    const a = makeArmor('cloth'); a.issued = true; G.load.armor = a; got.push(a);
+  }
+  return got.length ? [`町の支給品として、${got.map(itemName).join('と')}を受け取った。`] : [];
+}
+/* 地下牢の入口で借りる装備。帰るときに返す（持ち帰れない・売れない） */
+function prisonLoan() {
+  const whip = HERO_OF(G.hero || 'kai').onlyWhip, w = makeWeapon(whip ? 'whip' : 'sword', whip ? 2 : 1), a = makeArmor('cloth');
+  w.loan = a.loan = w.issued = a.issued = true;
+  return {weapon:w, armor:a, acc:null, heart:null, heart2:null};
+}
 /* ---------- 黄金の重い箱：どこで見つけたか ---------- */
 /* 古い箱は深さしか覚えていないので、深さから迷宮と階を推し量る */
 function boxPlace(box) {
@@ -2631,7 +2877,7 @@ function boxPlace(box) {
 /* 確率：[がらくた, そこそこ, 当たり, 大当たり, 伝説]。伝説は始まり2%、黄昏5%、深層は5%から10階ごとに+1%（最大10%）。増減はがらくたで調整 */
 function boxOdds(box) {
   const {dg, fl} = boxPlace(box);
-  const leg = dg === 1 ? .02 : dg === 2 ? .05 : Math.min(.10, .05 + .01 * Math.floor(fl / 10));
+  const leg = dg === 1 || dg === 4 ? .02 : dg === 2 ? .05 : Math.min(.10, .05 + .01 * Math.floor(Math.max(0, abyssVD(fl) - DUNGEONS[2].floors) / 4));
   return [.35 - leg, .30, .22, .13, leg];
 }
 /* 当たりの装備：見つけた迷宮と階で質が決まる。武器か防具。呪いは付かない */
@@ -2646,18 +2892,22 @@ function boxAffixes(on, n) {
   return out;
 }
 function boxGearSpec(box) {
-  const {dg, fl} = boxPlace(box);
+  let {dg, fl} = boxPlace(box);
+  if (dg === 4) { dg = 1; fl = Math.round(prisonVD(fl)); }
   if (dg === 1) {
     const [lo, p2] = fl <= 4 ? [2, 0] : fl <= 7 ? [3, .25] : [4, .45];
     return {tier:lo + (chance(.5) ? 1 : 0), aff:chance(p2) ? 2 : 1, plus:0};
   }
   if (dg === 2) return {tier:chance(fl <= 6 ? .3 : .6) ? 6 : 5, aff:2, plus:0};
-  return {tier:6, aff:2, plus:Math.min(3, Math.floor(fl / 10))};
+  /* 深層：黄昏の深淵の同じ強さの階と同じ。黄昏の最深部より深いところでは、鍛えられた装備が出始める */
+  const vd = abyssVD(fl);
+  if (vd <= DUNGEONS[2].floors) return {tier:chance(vd <= DUNGEONS[2].gate ? .3 : .6) ? 6 : 5, aff:2, plus:0};
+  return {tier:6, aff:2, plus:Math.min(3, Math.floor((vd - DUNGEONS[2].floors) / 4))};
 }
 function boxGear(box) {
   const sp = boxGearSpec(box);
   let it;
-  if (chance(.55)) it = makeWeapon(pick(Object.keys(WEAPONS)), sp.tier, boxAffixes('w', sp.aff));
+  if (chance(.55)) it = makeWeapon(pick(weaponPool()), sp.tier, boxAffixes('w', sp.aff));
   else {
     let c = Object.keys(ARMORS).filter(k => ARMORS[k].tier === sp.tier);
     if (!c.length) c = Object.keys(ARMORS).filter(k => ARMORS[k].tier === sp.tier - 1);
@@ -2797,12 +3047,14 @@ const EVENTS = {
     D.scene = {spr:'remains', title:'冒険者の亡骸', lines:L};
   },
   merchant(t) {
-    const c = randomCons(ED() + 2);
-    const g = randomGear(ED(), {noCurse:true, better:true});
-    D.ev = {type:'merchant', offers:[
-      {item:c, price:Math.round(CONS[c.type].price * 1.3), sold:false},
-      {item:g, price:Math.round(itemVal(g) * 1.6), sold:false},
-    ]};
+    /* 品ぞろえは3〜4品：消耗品と装備を1つずつ必ず置き、残りはどちらか */
+    const cOf = () => { const c = randomCons(ED() + 2); return {item:c, price:Math.round(CONS[c.type].price * 1.3), sold:false}; };
+    const gOf = () => { const g = randomGear(ED(), {noCurse:true, better:true}); return {item:g, price:Math.round(itemVal(g) * 1.6), sold:false}; };
+    const offers = [cOf(), gOf()];
+    const n = chance(.5) ? 3 : 4;
+    while (offers.length < n) offers.push(chance(.55) ? cOf() : gOf());
+    offers.sort((a, b) => (a.item.k === 'cons' ? 0 : 1) - (b.item.k === 'cons' ? 0 : 1));
+    D.ev = {type:'merchant', offers};
     D.scene = {spr:'merchant', title:'行商人', lines:[...t, '行商人「こんな所で客とはね。見ていくかい？」']};
     D.mode = 'merchant';
   },
@@ -2849,12 +3101,21 @@ const EVENTS = {
 };
 
 /* ---------- 行商人と祭壇 ---------- */
+function offerPrice(o) { return Math.max(1, Math.round(o.price * (1 - (pst().merchOff || 0)))); }
 function merchantBuy(i) {
-  const o = D.ev.offers[i];
-  if (!o || o.sold || D.gold < o.price) return;
+  const o = D.ev.offers[i], p = o ? offerPrice(o) : 0;
+  if (!o || o.sold || D.gold < p) return;
   if (curWeight() + itemWt(o.item) > pst().cap) return;
-  D.gold -= o.price; o.sold = true; D.bag.push(o.item);
-  D.scene.lines = [`${itemName(o.item)}を金貨${o.price}枚で買った。`];
+  D.gold -= p; o.sold = true;
+  /* 何も着けていない場所の装備なら、そのまま身に着ける */
+  const it = o.item, slot = ['weapon', 'armor', 'acc'].includes(slotOf(it)) ? equipSlotFor(it, D.eq) : null;
+  if (slot && !D.eq[slot] && canWield(it)) {
+    D.eq[slot] = it; D.hp = Math.min(D.hp, pst().maxHp);
+    D.scene.lines = [`${itemName(it)}を金貨${p}枚で買い、その場で身に着けた。`];
+  } else {
+    D.bag.push(it);
+    D.scene.lines = [`${itemName(it)}を金貨${p}枚で買った。`];
+  }
 }
 function tamerBuy(i) {
   const o = D.ev.offers[i];
@@ -2866,7 +3127,13 @@ function tamerBuy(i) {
 function tamerLeave() { D.ev = null; D.mode = 'floor'; D.scene = {spr:'tamer', title:'魔物使い', lines:['魔物使いは闇の奥へ消えていった。']}; }
 /* 行商人に売る：町の買取値の8割。お気に入り・依頼の品・黄金の箱は売れない */
 const MERCHANT_RATE = .8;
-function merchantCanSell(it) { return !it.fav && !(it.k === 'rare' && (RARES[it.type].quest || RARES[it.type].box)); }
+/* 金貨と換金できる宝を合わせて「深さ×30＋80」枚ぶん以上持っていると、行商人が寄ってきやすい（2倍） */
+const MERCH_RICH = {per:30, base:80, mul:2};
+function merchantRich() {
+  const worth = D.gold + D.bag.filter(x => x.k === 'treasure').reduce((s, x) => s + merchantPrice(x), 0);
+  return worth >= ED() * MERCH_RICH.per + MERCH_RICH.base;
+}
+function merchantCanSell(it) { return !it.fav && !it.issued && !(it.k === 'rare' && (RARES[it.type].quest || RARES[it.type].box)); }
 function merchantPrice(it) { return Math.max(1, Math.round(sellPrice(it) * MERCHANT_RATE)); }
 function merchantSell(id, all) {
   if (!D || D.mode !== 'merchant') return;
@@ -2987,8 +3254,8 @@ const TUNE3 = {escale:.08, bossHp:3.2, bossAtk:.8, base:0, rate:.6};
 const abyssVD = depth => Math.max(1, TUNE3.base + depth * TUNE3.rate);
 function spawnEnemy(depth, opt = {}) {
   const pool = {};
-  const dg = (D && D.dg) || 1, T = dg >= 2 ? TUNE2 : TUNE, off = DUNGEONS[dg].off;
-  const pd = dg === 3 ? 2 : dg, vd = dg === 3 ? abyssVD(depth) : depth;
+  const dg = (D && D.dg) || 1, T = hardDg(dg) ? TUNE2 : TUNE, off = DUNGEONS[dg].off;
+  const pd = poolDg(dg), vd = vdOf(dg, depth);
   for (const k in MON) { const m = MON[k]; if (!m.boss && m.lo && (m.d || 1) === pd && m.lo <= vd && (dg === 3 || vd <= m.hi)) pool[k] = 1 + (m.lo / 2); }
   const k = pickW(pool), m = MON[k];
   const f = 1 + (dg === 3 ? TUNE3.escale : T.escale) * (vd - m.lo);
@@ -3000,7 +3267,7 @@ function spawnEnemy(depth, opt = {}) {
   if (D.eq) { const ex = pst().hearts.executioner; if (ex) ep *= 1 - .25 * ex; }
   if (opt.noElite) ep = 0;
   if (opt.forceElite) ep = 1;
-  if (dg === 1 && depth <= 3 && TUNE.early < 1) { e.atk = Math.max(1, Math.round(e.atk * TUNE.early)); e.maxHp = Math.round(e.maxHp * (1 + TUNE.early) / 2); }
+  if ((dg === 1 || dg === 4) && vd <= 3 && TUNE.early < 1) { e.atk = Math.max(1, Math.round(e.atk * TUNE.early)); e.maxHp = Math.round(e.maxHp * (1 + TUNE.early) / 2); }
   if (chance(ep)) { e.elite = true; e.name = '猛る' + e.n; e.maxHp = Math.round(e.maxHp * 1.5); e.atk = Math.round(e.atk * 1.25); e.xp = Math.round(e.xp * 1.8); e.g *= 2; }
   e.hp = e.maxHp; e.cd = 0;
   return e;
@@ -3041,24 +3308,68 @@ function abyssBossAt(depth) {
   return D.abyssSeq[cyc][idx % 3];
 }
 function abyssNextGate() { return D.depth % 10 === 0 && D.gateClear !== D.depth ? D.depth : (Math.floor(D.depth / 10) + 1) * 10; }
-const ABYSS_BOSS_F = {greedking:{hp:1, atk:.9}, shadowking:{hp:.85, atk:1.1}, witch:{hp:.8, atk:.9}, abyssdragon:{hp:.95, atk:1.05}};
+const ABYSS_BOSS_F = {greedking:{hp:1, atk:.9}, shadowking:{hp:.85, atk:1.1}, witch:{hp:.7, atk:.8}, abyssdragon:{hp:.95, atk:1.05}};
 function spawnAbyssBoss(k, depth) {
   const m = MON[k], F = ABYSS_BOSS_F[k] || {hp:1, atk:1}, tf = typicalFoe(depth), s = 1 + .05 * (depth - 10);
   const hp = Math.round(tf.hp * TUNE3.bossHp * F.hp);
   return {k, hk:m.base || k, mk:MATS[k] ? k : (m.base || k), last:false, n:m.n, name:m.n, spr:m.spr, ai:m.ai, ev:k === 'shadowking' ? .12 : 0,
     maxHp:hp, hp, atk:Math.round(tf.atk * TUNE3.bossAtk * F.atk), def:Math.round(m.def * (1 + .03 * (depth - 10))), xp:Math.round(m.xp * s), g:Math.round(m.g * TUNE.gold * s), boss:true, cd:0, depth:Math.round(8 + abyssVD(depth)), abyss:true};
 }
-/* 強欲の王：毎ターン、袋の中のいちばん値打ちのある拾い物を飲み込む */
+/* 地下牢の中ボス：その階の魔物の強さを基準にする */
+const MID_F = {greedking:{hp:1.3, atk:1.05}, shadowking:{hp:.8, atk:1}, witch:{hp:.5, atk:.65}};
+function spawnMidBoss(k, depth) {
+  const m = MON[k], F = MID_F[k] || {hp:1, atk:1}, tf = typicalFoe(depth), s = depth >= 10 ? 1.15 : 1;
+  const hp = Math.round(tf.hp * PRISON.bossHp * F.hp * s);
+  return {k, hk:m.base || k, mk:MATS[k] ? k : (m.base || k), last:false, n:m.n, name:m.n, spr:m.spr, ai:m.ai, ev:k === 'shadowking' ? .1 : 0,
+    maxHp:hp, hp, atk:Math.round(tf.atk * PRISON.bossAtk * F.atk * s), def:Math.round(tf.def * 1.3 + 1), xp:Math.round(18 + depth * 6), g:Math.round(40 + depth * 12), boss:true, mid:true, cd:0, depth:Math.round(prisonVD(depth))};
+}
+/* 敵の毒：毒の敵にもう一度毒が入るたびに強くなる（毒→猛毒→劇毒→死毒）。ボスへは効果半分 */
+const FOE_POISON = {n:['毒', '猛毒', '劇毒', '死毒'], pct:[.05, .10, .15, .20], turns:3, bossMul:.5, weak:.05};
+/* 毒の敵は、段階ごとに攻撃が5%弱まる */
+const foePoisonWeak = f => f.poison > 0 ? 1 - FOE_POISON.weak * (f.pLv || 1) : 1;
+function poisonFoe(T, pre) {
+  const lv0 = T.poison > 0 ? (T.pLv || 1) : 0, lv = Math.min(FOE_POISON.n.length, lv0 + 1);
+  T.poison = FOE_POISON.turns; T.pLv = lv;
+  const d = foePoisonDmg(T); T.hp -= d;
+  if (!lv0) blog(`${pre || ''}${T.name}は毒に冒された。${d}の傷。`);
+  else if (lv > lv0) blog(`${pre || ''}${T.name}の${FOE_POISON.n[lv0 - 1]}が${FOE_POISON.n[lv - 1]}に変わった！ ${d}の傷。`);
+  else blog(`${pre || ''}${T.name}の${FOE_POISON.n[lv - 1]}がさらに回る。${d}の傷。`);
+}
+function foePoisonDmg(f) { const lv = f.pLv || 1; return Math.max(1, Math.round(f.maxHp * FOE_POISON.pct[lv - 1] * (f.boss ? FOE_POISON.bossMul : 1))); }
+/* 強欲の王：毎ターン金貨を奪う（持ち金の15%か、深さ×10枚の多いほう）。金貨が尽きたら拾い物を飲み込む。黄金の重い箱は真っ先に狙い、金貨200〜300枚ぶん満足する。
+   奪った金貨の合計が「深さ×20枚」に達するたびに満足し、攻撃が10%下がる（最大50%、その戦いの間だけ） */
+const GREED = {rate:.15, minPer:10, satPer:20, satStep:.1, satMax:5};
+function greedSatisfy(f, dp, amt) {
+  if (f.atk0 == null) f.atk0 = f.atk;
+  f.gStolen = (f.gStolen || 0) + amt;
+  const lv = Math.min(GREED.satMax, Math.floor(f.gStolen / (dp * GREED.satPer)));
+  if (lv > (f.sat || 0)) {
+    f.sat = lv; f.atk = Math.max(1, Math.round(f.atk0 * (1 - GREED.satStep * lv)));
+    blog(lv >= GREED.satMax ? `${f.name}は満ち足りて、腹をさすっている。攻撃がすっかり鈍った（−${lv * 10}%）。` : `${f.name}は満足げに腹をさすった。攻撃が鈍った（−${lv * 10}%）。`);
+  }
+}
 function greedSteal(f) {
+  const dp = Math.max(1, f.depth || ED());
+  const gb = D.bag.find(x => x.k === 'rare' && x.type === 'goldbox');
+  if (gb) {
+    D.bag.splice(D.bag.indexOf(gb), 1);
+    blog(`${f.name}が黄金の重い箱をひったくり、丸ごと飲み込んだ！`);
+    greedSatisfy(f, dp, 200 + rnd(101));
+    return;
+  }
+  if (D.gold > 0) {
+    const gl = Math.min(D.gold, Math.max(Math.ceil(D.gold * GREED.rate), dp * GREED.minPer)); D.gold -= gl;
+    blog(`${f.name}が金貨${gl}枚を奪い取った！`);
+    greedSatisfy(f, dp, gl);
+    return;
+  }
   const cands = D.bag.filter(x => !x.b && !(x.k === 'rare' && RARES[x.type].quest) && x.k !== 'cons');
   if (cands.length) {
     cands.sort((a, b) => itemScoreVal(b) - itemScoreVal(a));
     const it = cands[0];
     D.bag.splice(D.bag.indexOf(it), 1);
+    (f.swallowed = f.swallowed || []).push(it);
     blog(`${f.name}が${itemName(it)}を奪い、飲み込んだ！`);
-  } else if (D.gold > 0) {
-    const gl = Math.max(1, Math.ceil(D.gold * .15)); D.gold -= gl;
-    blog(`${f.name}が金貨${gl}枚を奪い取った！`);
   }
 }
 /* 千手の魔女：魔法陣から手下を呼ぶ（崩しで止められる） */
@@ -3070,19 +3381,29 @@ function summonMinion(f) {
   e.name = '手下の' + e.n; e.minion = true; e.xp = Math.round(e.xp * .3); e.g = 0;
   b.foes.push(e); chooseFoeIntent(b, e); rollRead(e);
   blog(`${f.name}の魔法陣から、${e.name}が現れた！`);
+  if (f.k === 'witch') blog(`${f.name}は手下から力を吸い上げ、強化された！`);
 }
 
 /* ---------- 洞察と狡猾さ ---------- */
-const CUN_MOD = {rat:-2, bat:0, slime:-3, goblin:2, spider:1, skeleton:0, orc:-1, ghost:4, snake:2, minotaur:-2, shadow:5, knight:2, golem:2, dragon:3, mimic:3, executioner:4, ghostknight:3, greedking:3, shadowking:14, witch:4};
+const CUN_MOD = {rat:-2, bat:0, slime:-3, goblin:2, spider:1, skeleton:0, orc:-1, ghost:4, snake:2, minotaur:-2, shadow:5, knight:2, golem:2, dragon:3, mimic:3, executioner:4, ghostknight:3, greedking:3, shadowking:14, witch:9, boxer:4};
 const READ_N = {mikiri:'見切り', exact:'読めた', sense:'察した', hidden:'読めない'};
 function foeCunning(f) {
   const dg = (D && D.dg) || 1, fl = Math.max(1, (f.depth || ED()) - DUNGEONS[dg].off);
-  const c = (dg >= 2 ? 12 : 4) + fl + (CUN_MOD[f.k] ?? CUN_MOD[f.hk] ?? 0) + (f.elite ? 3 : 0) + (f.boss ? 2 : 0);
-  return Math.max(0, c - (f.cunDown || 0));
+  const c = (hardDg(dg) ? 12 : 4) + fl + (CUN_MOD[f.k] ?? CUN_MOD[f.hk] ?? 0) + (f.elite ? 3 : 0) + (f.boss ? 2 : 0);
+  return Math.max(0, c - (f.cunDown || 0) - (D && D.eq ? pst().cunDown : 0));
 }
 function kehaiPenalty() { return D.kehai >= 75 ? 7 : D.kehai >= 50 ? 4 : D.kehai >= 25 ? 2 : 0; }
 function insightNow() { const b = D.battle; return pst().insight - kehaiPenalty() + ((b && b.focus) || 0); }
+/* 千手の魔女：二重詠唱の確率。読みは「詠唱か強攻撃」「召喚か強攻撃」の2択で迷わせる（読めないことはない）。
+   手下がいると、1体ごとに魔女への傷が25%減り（最大75%）、魔女の攻撃と回復が強まる（数値は見せない） */
+const WITCH = {echo:.4, castSet:['spell', 'summon'], shield:.25, shieldMax:.75, atkUp:.15, regen:.015};
+const witchMinions = f => f.k === 'witch' && D.battle ? alive(D.battle).filter(x => x.minion).length : 0;
 function senseCands(f) {
+  if (f.k === 'witch') {
+    const cast = WITCH.castSet.includes(f.intent);
+    const decoy = cast ? 'heavy' : f.intent === 'heavy' ? pick(WITCH.castSet) : null;
+    if (decoy) return chance(.5) ? [f.intent, decoy] : [decoy, f.intent];
+  }
   let pool = Object.keys(stanceW(f.k)).filter(k => k !== f.intent && k !== 'steal');
   if (!pool.length) pool = ['strike', 'heavy', 'rapid', 'guard'].filter(k => k !== f.intent);
   const decoy = pick(pool);
@@ -3091,18 +3412,20 @@ function senseCands(f) {
 function rollRead(f) {
   const diff = insightNow() - foeCunning(f);
   f.diff = diff;
-  if (f.intent === 'stagger') { f.read = 'exact'; return; }
+  if (f.intent === 'stagger' || f.intent === 'echo' || (D.eq && pst().dwk === 'deye' && f.intent === 'spell')) { f.read = 'exact'; return; }
   const pRead = clamp(.6 + diff * .07, .05, .97), pMik = clamp((diff - 3) * .07, 0, .5), r = R();
   if (r < pMik) f.read = 'mikiri';
   else if (r < pRead) f.read = 'exact';
   else if (r < Math.min(1, pRead + .3)) { f.read = 'sense'; f.cands = senseCands(f); }
   else f.read = 'hidden';
+  if (f.k === 'witch' && f.read === 'hidden' && f.intent !== 'echo') { f.read = 'sense'; f.cands = senseCands(f); }
 }
 
 /* ---------- 群れ ---------- */
 function packChance(depth) {
   const dg = (D && D.dg) || 1;
-  let p = dg >= 2 ? .2 + (dg === 3 ? abyssVD(depth) : depth) * .015 : (depth < 4 ? 0 : .03 + depth * .02);
+  const pv = vdOf(dg, depth);
+  let p = hardDg(dg) ? .2 + pv * .015 : (pv < 4 ? 0 : .03 + pv * .02);
   if (D.ftype === 'nest') p += .15;
   if (D.kehai >= 50) p += .08;
   return clamp(p, 0, .6);
@@ -3138,7 +3461,7 @@ function startBattle(eOrList, ctx) {
 }
 function chooseFoeIntent(b, e) {
   let k;
-  if (e.next) { k = e.next; e.next = null; }
+  if (e.next) { k = e.next; e.next = null; if (k === 'stagger' && e.extraStagger) { e.extraStagger = 0; e.next = 'stagger'; } }
   else {
     const w = stanceW(e.k);
     if (e.intent === 'guard') delete w.guard;
@@ -3204,7 +3527,7 @@ function battleAct(kind, arg) {
       if (it.type === 'bait') { b.bait = true; blog(`誘いの餌を投げた。魔物の目つきが変わった…。`); }
       else if (it.type === 'firebomb') {
         const d = 18 + ED() * 4;
-        for (const f of alive(b)) { f.hp -= d; blog(`火炎瓶が炸裂した！ ${f.name}に${d}の傷。`); }
+        for (const f of alive(b)) { const dd = Math.max(1, Math.round(d * fireMul(f))); f.hp -= dd; blog(`火炎瓶が炸裂した！ ${f.name}に${dd}の傷。${fireNote(f)}`); }
         b.fx.enemyHit = true;
       } else { const L = []; useField(it, L); L.forEach(blog); }
     } else return;
@@ -3227,14 +3550,16 @@ function battleAct(kind, arg) {
     if (TUNE.poisonSafe) { const real = Math.min(d, D.hp - 1); D.hp -= real; if (real > 0) blog(`毒で${real}の傷を受けた。`); }
     else { blog(`毒で${d}の傷を受けた。`); if (!battleHurt(d, '毒に倒れた')) return; }
   }
+  for (const f of alive(b)) { const n = witchMinions(f); if (n && f.hp < f.maxHp) f.hp = Math.min(f.maxHp, f.hp + Math.max(1, Math.round(f.maxHp * WITCH.regen * n))); }
   for (const f of alive(b)) if (f.poison > 0) {
-    const d = Math.max(1, Math.round(f.maxHp * .05)); f.poison--; f.hp -= d; blog(`${f.name}は毒で${d}の傷を受けた。`);
+    const d = foePoisonDmg(f), pn = FOE_POISON.n[(f.pLv || 1) - 1]; f.poison--; f.hp -= d; blog(`${f.name}は${pn}で${d}の傷を受けた。`); if (f.poison <= 0) f.pLv = 0;
   }
   if (!alive(b).length) { winBattle(); return; }
   b.turn++; chooseIntent();
 }
 function battleHurt(d, why) {
   D.hp -= d; D.battle.fx.playerHit = true; D.battle.hurt = true;
+  if (D.battle.kiai) { D.battle.kiai = 0; blog('攻撃を受け、気迫が途切れた。'); }
   if (D.hp <= 0) {
     if (D.stand) { D.stand = false; D.stood = true; D.hp = 1; blog('倒れかけたが、踏みとどまった！'); return true; }
     die(why || `${D.battle.e.name}に倒された`); return false;
@@ -3243,7 +3568,7 @@ function battleHurt(d, why) {
 }
 function doSteal(S, e) {
   if (e.stolen) { blog('もう何も持っていないようだ。'); return; }
-  if (chance(.55 + S.agi * .02)) {
+  if (S.bwk === 'bdagger' || chance(.55 + S.agi * .02)) {
     e.stolen = true;
     if (chance(.5) && MATS[e.mk]) { D.pending.push(makeMat(e.mk)); blog(`${MATS[e.mk].n}を盗んだ！`); }
     else { const g = Math.round(e.g * 1.5 * (1 + S.luck)) + 5; D.gold += g; blog(`金貨${g}枚を盗んだ！`); }
@@ -3262,9 +3587,41 @@ function matchupFor(sk, f, isTarget) {
   if (!isTarget && (m.interrupt || m.stagger || m.deal)) m = {...m, interrupt:false, stagger:false, deal:0, ignoreDef:false, take:STANCE[st].atk ? ((sk.type === 'atk' || sk.type === 'brk') ? 1 : m.take) : 0};
   return m;
 }
+/* 火属性：炎の傷は、敵によって効き方が違う（2倍・1.5倍・半分など） */
+const FIRE_MUL = {slime:1.5, iceslime:2, spider:1.5, mimic:1.5, ghost:1.5, wailer:1.5, bat:1.25, bloodbat:1.25,
+  flamemage:.5, dragon:.5, abyssdragon:.5, oni:.7, golem:.7, colossus:.5, obsidian:.5};
+const fireMul = f => FIRE_MUL[f.k] ?? FIRE_MUL[f.hk] ?? 1;
+const fireNote = f => '';  /* 火への強さ・弱さは見せない */
+/* 効果音：戦闘の出来事を順に積み、画面を描いたあとに鳴らす */
+const SFXQ = [];
+const sfx = k => { if (SFXQ.length < 8) SFXQ.push(k); };
+const SFX_WPN = {sword:'sword', spear:'spear', axe:'axe', dagger:'dagger', whip:'whip', bow:'bow', staff:'punch', fist:'punch'};
+const SFX_BLADE = {skeleton:1, knight:1, ghostknight:1, executioner:1, shadowking:1};
+const SFX_CRUSH = {golem:1, orc:1, minotaur:1, greedking:1, slime:1};
+const SFX_BITE = {rat:1, bat:1, snake:1, spider:1, mimic:1};
+function playerSfx(sk) {
+  if (sk.magic) return 'fire';
+  if (sk.hk) return 'heart';
+  if (sk.hits) return 'double';
+  const w = D.eq.weapon; return w ? (SFX_WPN[w.type] || 'punch') : 'punch';
+}
+function foeSfx(f, st) {
+  const ST = STANCE[st], k = f.hk || f.k;
+  if (st === 'breath') return 'fire';
+  if (ST.magic) return 'magic';
+  if (k === 'boxer') return ST.danger ? 'fistH' : 'fistE';
+  if (SFX_BLADE[k]) return 'blade';
+  if (ST.danger) return 'heavy';
+  if (k === 'dragon') return 'bigbite';
+  if (SFX_CRUSH[k]) return 'crush';
+  if (SFX_BITE[k]) return 'bite';
+  if (k === 'goblin') return 'claw';
+  return k.length % 2 ? 'mon' : 'mon2';
+}
 /* 1ターンの決着：こちらの技と、敵それぞれの構えを同時に解決する */
 function resolveTurn(sk) {
   const b = D.battle, S = pst();
+  if (S.bwk === 'bwhip' && sk === SKILLS.lash) sk = {...sk, hits:2 + rnd(2), mult:.45};
   retarget(b);
   const T = b.e;
   if (sk.type !== 'none') {
@@ -3272,7 +3629,16 @@ function resolveTurn(sk) {
     if (alive(b).some(f => f.read === 'mikiri')) b.focusNext = 3;
     if (b.e && b.e.read === 'mikiri' && D.track) D.track.mikiri++;
   }
-  const tst = stOf(T), mT = matchupFor(sk, T, true);
+  const tst = stOf(T); let mT = matchupFor(sk, T, true);
+  /* かわしの疲れ：2回続けてかわしたあとは、かわせる確率が半分、その次はさらに半分… */
+  const dodgeFail = sk.type === 'dodge' && (b.dodgeRun || 0) >= 2 && !chance(Math.pow(.5, (b.dodgeRun || 0) - 1));
+  const tired = m => dodgeFail ? {...m, take:m.take > 0 || m.counter > 0 ? 1 : m.take, counter:0} : m;
+  if (dodgeFail) { blog('続けてかわしすぎて、足がもつれた！'); mT = tired(mT); }
+  /* 崩しの疲れ：崩しを3回続けると、止める技が読まれやすくなる */
+  if (sk.type === 'brk' && mT.interrupt && tst !== 'steal' && (b.brkRun || 0) >= 2 && chance(Math.min(.9, .3 * ((b.brkRun || 0) - 1)))) {
+    mT = {...mT, interrupt:false, deal:STANCE[tst].atk ? .5 : 1, take:STANCE[tst].atk ? 1 : 0};
+    blog(`崩しを続けすぎて、動きを読まれた！ ${T.name}は構わず${STANCE[tst].chip === '召喚' ? '魔法陣を描き切る' : '押し切ってくる'}！`);
+  }
   // こちらの行動
   if (sk.heal) {
     const fh = Math.pow(.6, b.heals || 0); b.heals = (b.heals || 0) + 1;
@@ -3283,21 +3649,41 @@ function resolveTurn(sk) {
   const power = (sk.mult || 0) * mT.deal + (sk.own || 0);
   if (power > 0) {
     const acc = (sk.acc || .95) - (sk.magic ? 0 : T.ev || 0);
-    if (!chance(acc)) blog(`${sk.n}！ しかし外れた。`);
+    if (!chance(acc)) { blog(`${sk.n}！ しかし外れた。`); sfx('swish'); }
     else {
       const mik = T.read === 'mikiri';
-      const crit = !sk.magic ? chance(S.crit + (sk.crit || 0) + (mik ? .3 : 0)) : mik && chance(.3);
-      const ef = (mT.ignoreDef || sk.magic) ? 1 : edefF(T, sk.pierce || 0, b.defDown);
+      const crit = !sk.magic ? (b.sureCrit && sk.type === 'atk') || chance(S.crit + (sk.crit || 0) + (mik ? .3 : 0)) : mik && chance(.3);
+      if (sk.type === 'atk') b.sureCrit = false;
+      const ef = (mT.ignoreDef || sk.magic || (S.dwk === 'dclaw' && sk.pierce)) ? 1 : edefF(T, sk.pierce || 0, b.defDown);
       let dmg = (S.atk + (sk.magic ? S.mag : 0)) * power * (crit ? 1.5 : 1) * rv() * ef;
+      if (S.bareFist && !sk.magic) dmg *= 1 + bareBonus(S);
+      let kiaiUp = 0;
+      if (S.kiai && !sk.magic) {
+        /* 王者の気迫：1発ごとに上乗せし、1発ごとに高まる */
+        let tot = 0; const k0 = b.kiai || 0;
+        for (let i = 0; i < (sk.hits || 1); i++) { tot += 1 + .15 * (b.kiai || 0); if ((b.kiai || 0) < 4) b.kiai = (b.kiai || 0) + 1; }
+        dmg *= tot; kiaiUp = b.kiai - k0;
+      } else if (sk.hits) dmg *= sk.hits;
+      if (S.grit && D.hp <= S.maxHp * .3) dmg *= 1.3;
       if (T.hk === 'slime' && !sk.magic) dmg *= .8;
+      if (sk.el === 'fire') { dmg *= fireMul(T) * (S.dwk === 'deye' ? 1.5 : 1); }
+      if (S.dwk === 'dfang' && T.boss) dmg *= 1.25;
+      if (S.bwk === 'bstaff' && (T.read === 'exact' || T.read === 'mikiri')) dmg *= 1.3;
+      if (S.bwk === 'bwhip' && T.minion) dmg *= 2;
+      if (S.bwk === 'bdagger') dmg *= 1 + Math.min(.3, D.gold / 2000);
+      const wm = witchMinions(T); if (wm) dmg *= 1 - Math.min(WITCH.shieldMax, WITCH.shield * wm);
       if (sk.execute && T.hp <= T.maxHp * sk.execute) { dmg *= 2; blog(`${T.name}の弱みを突いた！`); }
       dmg = Math.max(1, Math.round(dmg));
-      const fire = S.fire && !sk.magic ? S.fire : 0;
-      T.hp -= dmg + fire; b.fx.enemyHit = true;
-      blog(`${mik ? '見切った！ ' : ''}${sk.n}！${crit ? ' 急所に当たった！' : ''} ${T.name}に${dmg}${fire ? `＋炎${fire}` : ''}の傷。`);
+      const fire = S.fire && !sk.magic ? Math.max(1, Math.round(S.fire * fireMul(T))) : 0;
+      T.hp -= dmg + fire; b.fx.enemyHit = true; sfx(playerSfx(sk)); if (crit) sfx('crit');
+      blog(`${mik ? '見切った！ ' : ''}${sk.n}！${crit ? ' 急所に当たった！' : ''} ${T.name}に${sk.hits ? `${sk.hits}発で` : ''}${dmg}${fire ? `＋炎${fire}` : ''}の傷。${sk.el === 'fire' || fire ? fireNote(T) : ''}${wm ? `（手下が庇っている：傷−${Math.round(Math.min(WITCH.shieldMax, WITCH.shield * wm) * 100)}%）` : ''}`);
+      if (S.chase && T.hp > 0 && chance(S.chase)) {
+        const c = Math.max(1, Math.round(S.atk * .5 * rv() * ef)); T.hp -= c; blog(`見えない手が追い打ち！ ${T.name}に${c}の傷。`); sfx('heart');
+      }
+      if (kiaiUp > 0) blog(`王者の気迫が高まる！（次の一撃 +${b.kiai * 15}%）`);
       if (S.vamp) { const h = Math.max(1, Math.round(dmg * S.vamp)); D.hp = Math.min(S.maxHp, D.hp + h); }
       if (sk.vampSk) { const h = Math.max(1, Math.round(dmg * sk.vampSk)); D.hp = Math.min(S.maxHp, D.hp + h); blog(`体力を${h}吸い取った。`); }
-      if (sk.poisonSk || (S.venom && chance(S.venom))) { T.poison = 3; blog(`${T.name}は毒に冒された。`); }
+      for (let i = 0; i < (sk.hits || 1); i++) if (sk.poisonSk || (S.venom && chance(S.venom))) poisonFoe(T, sk.hits ? `${i + 1}発目が毒を運ぶ。` : '');
       if (sk.swallow && T.hp > 0 && !T.boss && T.hp <= T.maxHp * .25 && chance(sk.swallow)) { T.hp = 0; blog(`${T.name}を丸呑みにした！`); }
       heartOnHit(S, dmg);
     }
@@ -3310,20 +3696,26 @@ function resolveTurn(sk) {
       if (f === T) continue;
       const mf = matchupFor(sk, f, true), pw = (sk.mult || 0) * mf.deal;
       if (pw <= 0) continue;
-      const d = Math.max(1, Math.round((S.atk + S.mag) * pw * rv()));
-      f.hp -= d; hitL.push(`${f.name}に${d}`); b.fx.enemyHit = true;
+      const d = Math.max(1, Math.round((S.atk + S.mag) * pw * rv() * (sk.el === 'fire' ? fireMul(f) * (S.dwk === 'deye' ? 1.5 : 1) : 1)));
+      f.hp -= d; hitL.push(`${f.name}に${d}${sk.el === 'fire' ? fireNote(f) : ''}`); b.fx.enemyHit = true;
       if (f.hp <= 0 && sk.hk) { G.stats = G.stats || {}; G.stats.heartKills = (G.stats.heartKills || 0) + 1; }
     }
-    if (hitL.length) blog(`黒い炎が広がり、${hitL.join('、')}の傷。`);
+    if (hitL.length) blog(`${sk.hk ? '黒い炎' : '炎'}が広がり、${hitL.join('、')}の傷。`);
   }
+  if (mT.stagger || mT.interrupt) sfx('break');
+  if (S.dwk === 'dwhisker' && sk.type === 'dodge' && (sk.own || 0) > 0) b.sureCrit = true;
+  if (mT.stagger && S.dwk === 'dhorn' && sk.type === 'brk' && !T.boss) T.extraStagger = 1;
   if (mT.stagger) { T.next = 'stagger'; blog(`${T.name}の守りを崩した！ よろめいている。`); }
   if (mT.interrupt) {
     if (tst === 'charge') { T.next = 'stagger'; blog(`溜めを潰した！ ${T.name}はよろめいている。`); }
-    else if (tst === 'spell') blog('詠唱を断ち切った！');
+    else if (tst === 'spell') {
+      blog('詠唱を断ち切った！');
+      if (T.k === 'witch' && T.hp > 0 && chance(WITCH.echo)) { T.next = 'echo'; blog(`${T.name}の唇は、まだ動いている……二重詠唱だ！`); }
+    }
     else if (tst === 'steal') blog('伸びてきた手を払いのけた！');
   }
   if (sk.bind && T.hp > 0 && T.next !== 'stagger' && T.next !== 'smash' && T.next !== 'breath') {
-    const p = .75 * Math.pow(.55, T.binds || 0);
+    const p = Math.min(.95, .75 * Math.pow(.55, T.binds || 0) * (S.bwk === 'bwhip' ? 1.5 : 1));
     if (T.boss) blog(`${T.name}はびくともしない。`);
     else if (chance(p)) { T.binds = (T.binds || 0) + 1; T.next = 'stagger'; blog(`${T.name}を縛り上げた！ 次は動けない。`); }
     else blog('縛ろうとしたが、すり抜けられた。');
@@ -3331,8 +3723,10 @@ function resolveTurn(sk) {
   if (T.hp <= 0 && sk.hk) { G.stats = G.stats || {}; G.stats.heartKills = (G.stats.heartKills || 0) + 1; }
   if (T.hp <= 0 && alive(b).length) blog(`${T.name}を倒した！`);
   // 敵の行動
-  const ms = b.foes.map(f => f === T ? mT : matchupFor(sk, f, false));
+  const ms = b.foes.map(f => f === T ? mT : tired(matchupFor(sk, f, false)));
   b.guardRun = sk.type === 'guard' ? (b.guardRun || 0) + 1 : 0;
+  b.brkRun = sk.type === 'brk' ? (b.brkRun || 0) + 1 : 0;
+  b.dodgeRun = sk.type === 'dodge' ? (b.dodgeRun || 0) + 1 : 0;
   const n0 = b.foes.length;
   for (let i = 0; i < n0; i++) {
     const f = b.foes[i];
@@ -3347,6 +3741,7 @@ function resolveTurn(sk) {
 }
 function foeAct(f, st, m, sk) {
   const b = D.battle, S = pst(), ST = STANCE[st];
+  if (st === 'dummy') return true;
   if (st === 'stagger') { blog(`${f.name}は体勢を立て直している。`); return true; }
   if (st === 'summon') { if (m.interrupt) blog('魔法陣を断ち切った！'); else summonMinion(f); return true; }
   if (st === 'guard') { if (!m.stagger) blog(`${f.name}は守りを固めている。`); return true; }
@@ -3366,25 +3761,27 @@ function foeAct(f, st, m, sk) {
   if (st === 'feint' && sk.type === 'guard') blog(`${f.name}に構えごと叩き割られた！`);
   for (let i = 0; i < hits; i++) {
     if (m.take === 0) { avoided++; continue; }
-    let dmg = f.atk * ST.mult * rv() * pdefF(S, ST.magic) * m.take;
+    let dmg = f.atk * foePoisonWeak(f) * (1 + WITCH.atkUp * witchMinions(f)) * ST.mult * rv() * pdefF(S, ST.magic) * m.take;
     if (sk.wall) dmg *= 1 - sk.wall;
+    if (S.grit && D.hp <= S.maxHp * .3) dmg *= .8;
     if (S.dragonGuard && ST.magic) dmg *= 1 - S.dragonGuard;
-    if (S.hearts.knight && chance(S.htps.knight)) { blog(`鉄の騎士のこころが盾となり、${f.name}の${ST.verb}を防いだ！`); continue; }
+    if (S.hearts.knight && chance(S.htps.knight)) { blog(`鉄の騎士のこころが盾となり、${f.name}の${ST.verb}を防いだ！`); sfx('shield'); continue; }
     if (S.hearts.golem && chance(S.htps.golem)) { dmg *= .5; blog('石の門番のこころが一撃を受け止めた！'); }
     else if (S.hearts.skeleton && ST.danger && chance(S.htps.skeleton)) { dmg *= .5; blog('骸骨兵のこころが一撃を受け止めた！'); }
     dmg = Math.max(1, Math.round(dmg));
-    blog(`${f.name}の${ST.verb}！ ${dmg}の傷を受けた。`);
+    blog(`${f.name}の${ST.verb}！ ${dmg}の傷を受けた。`); sfx(sk.type === 'guard' && m.take < 1 ? 'shield' : foeSfx(f, st));
     if (!battleHurt(dmg, `${f.name}に倒された`)) return false;
+    if (sk.burn && f.hp > 0) { const c = Math.max(1, Math.round(S.atk * sk.burn * fireMul(f) * rv())); f.hp -= c; blog(`炎の壁が${f.name}を焼いた！ ${c}の傷。${fireNote(f)}`); }
     if (S.thorns && f.hp > 0) { const c = Math.max(1, Math.round(dmg * S.thorns)); f.hp -= c; blog(`棘が刺さり、${f.name}に${c}の傷。`); }
     if (ST.poison && poisonPlayer(ST.poison, blog)) blog('毒を受けた！');
     if (ST.drain) { const h = Math.round(dmg * ST.drain); f.hp = Math.min(f.maxHp, f.hp + h); blog(`${f.name}は生命力を吸い取った。`); }
     if (st === 'plunder') greedSteal(f);
     if (f.hp <= 0) return true;
   }
-  if (avoided) blog(sk.type === 'guard' ? `${f.name}の${ST.verb}を受け止めた！` : `${f.name}の${ST.verb}をかわした！`);
+  if (avoided) { blog(sk.type === 'guard' ? `${f.name}の${ST.verb}を受け止めた！` : `${f.name}の${ST.verb}をかわした！`); sfx(sk.type === 'guard' ? 'shield' : 'swish'); }
   if (m.counter && f.hp > 0) {
     const c = Math.max(1, Math.round(S.atk * m.counter * (sk.counterMul || 1) * (f.read === 'mikiri' ? 1.25 : 1) * rv() * edefF(f, 0, b.defDown)));
-    f.hp -= c; b.fx.enemyHit = true; blog(`反撃！ ${f.name}に${c}の傷。`);
+    f.hp -= c; b.fx.enemyHit = true; blog(`反撃！ ${f.name}に${c}の傷。`); sfx('clash');
   }
   return true;
 }
@@ -3397,7 +3794,7 @@ function heartOnHit(S, dmg) {
     case 'spider': if (!e.boss && !e.next) { e.next = 'stagger'; blog(`大蜘蛛のこころが糸を吐いた！ ${e.name}は動けない。`); } break;
     case 'orc': { const d = Math.max(1, Math.round(S.atk * .5 * rv() * edefF(e))); e.hp -= d; blog(`オークのこころが強打を重ねた！ ${d}の傷。`); break; }
     case 'ghost': { const h = Math.max(1, Math.round(dmg * .4)); D.hp = Math.min(S.maxHp, D.hp + h); blog(`亡霊のこころが生命力を吸い取った。体力が${h}回復。`); break; }
-    case 'snake': e.poison = 3; blog(`大蛇のこころが牙を立てた！ ${e.name}は毒に冒された。`); break;
+    case 'snake': poisonFoe(e, '大蛇のこころが牙を立てた！ '); break;
     case 'minotaur': { const d = Math.max(1, Math.round(S.atk * rv() * edefF(e))); e.hp -= d; blog(`牛頭の戦士のこころが突進した！ ${d}の傷。`); break; }
     case 'shadow': { const d = Math.max(1, Math.round((S.atk + S.mag) * .5 * rv())); e.hp -= d; blog(`影の魔術師のこころが追撃した！ ${d}の傷。`); break; }
     case 'executioner': if (!e.boss) { e.hp = 0; blog(`処刑人のこころが刃を振るった！ ${e.name}を一撃で倒した。`); } break;
@@ -3409,7 +3806,83 @@ function heartOnHit(S, dmg) {
     }
 }
 }
+/* ---------- 竜の武器：竜の部位2つ・金貨1000枚・同じ種類の魔鋼の武器1本で作る ----------
+   強さは魔鋼の武器の1.1倍。エンチャントが1〜2個つく。龍肺の火筒だけは、どの魔鋼の武器からでも作れる */
+const DRAGON_W_MUL = 1.1, DRAGON_W_COST = {parts:2, gold:1000, tier:5};
+const DRAGON_W = {
+  dfang:   {type:'sword', n:'竜牙の剣',   d:'主（ボス）への傷 +25%'},
+  dclaw:   {type:'spear', n:'竜爪の槍',   d:'「突く」が守りを完全に無視する'},
+  dhorn:   {type:'axe',   n:'竜角の斧',   d:'「叩き割る」で守りを崩すと、敵は2ターンよろめく（主には効かない）'},
+  deye:    {type:'staff', n:'竜瞳の杖',   d:'火の技の威力 +50%。詠唱の構えを必ず読める'},
+  dwhisker:{type:'bow',   n:'竜髭の弓',   d:'「退き撃ち」のあと、次の攻めが必ず急所に当たる'},
+  dlung:   {type:'flame', n:'龍肺の火筒', d:'火の技しか持たない筒。炎を吐いて敵全体を焼く'},
+};
+/* 中ボスの武器：影王の外套・魔女の呪布・強欲の金歯だけで作れる。強さは竜の武器と同じ（魔鋼の1.1倍、エンチャント1〜2個） */
+const BOSS_W = {
+  bstaff: {type:'staff',  n:'影王の杖',     mats:{shadowking:2, witch:1, greedking:1}, d:'洞察 +6・敵の狡猾さ −4。構えが読めた相手への傷 +30%'},
+  bwhip:  {type:'whip',   n:'千手の鞭',     mats:{shadowking:1, witch:2, greedking:1}, d:'「打つ」が見えない手と一緒に2〜3発に分かれて当たる。縛るが効きやすく、呼ばれた手下には傷2倍'},
+  bdagger:{type:'dagger', n:'強欲の短刀',   mats:{shadowking:1, witch:1, greedking:2}, d:'「盗む」が必ず成功し、倒した敵の金貨 +50%。手持ちの金貨が多いほど攻撃が上がる（最大+30%）'},
+};
+function bossCraftState(k) { for (const m in BOSS_W[k].mats) if (matCount(m) < BOSS_W[k].mats[m]) return 'mats'; return 'ok'; }
+function bossCraft(k) {
+  if (!BOSS_W[k] || bossCraftState(k) !== 'ok') return null;
+  for (const m in BOSS_W[k].mats) for (let i = 0; i < BOSS_W[k].mats[m]; i++) G.wh.splice(G.wh.findIndex(x => x.k === 'mat' && x.type === m), 1);
+  const it = makeWeapon(BOSS_W[k].type, DRAGON_W_COST.tier, boxAffixes('w', chance(.5) ? 2 : 1)); it.bw = k;
+  G.wh.push(it);
+  G.news = `${itemName(it)}が打ち上がった！`;
+  return it;
+}
+function dragonBases(part) {
+  const t = DRAGON_W[part].type;
+  return G.wh.filter(x => x.k === 'weapon' && x.tier === DRAGON_W_COST.tier && !x.dw && !x.bw && !x.fav && !WEAPONS[x.type].unique && (t === 'flame' || x.type === t));
+}
+function dragonCraftState(part) {
+  if (matCount(part) < DRAGON_W_COST.parts) return 'mats';
+  if (!dragonBases(part).length) return 'base';
+  if (G.gold < DRAGON_W_COST.gold) return 'gold';
+  return 'ok';
+}
+function dragonCraft(part) {
+  if (!DRAGON_W[part] || dragonCraftState(part) !== 'ok') return null;
+  const base = dragonBases(part).sort((a, b) => itemVal(a) - itemVal(b))[0];
+  G.wh.splice(G.wh.indexOf(base), 1);
+  for (let i = 0; i < DRAGON_W_COST.parts; i++) G.wh.splice(G.wh.findIndex(x => x.k === 'mat' && x.type === part), 1);
+  G.gold -= DRAGON_W_COST.gold;
+  const it = makeWeapon(DRAGON_W[part].type, DRAGON_W_COST.tier, boxAffixes('w', chance(.5) ? 2 : 1)); it.dw = part;
+  G.wh.push(it);
+  G.news = `${itemName(base)}と竜の部位から、${itemName(it)}が打ち上がった！`;
+  return it;
+}
+/* ---------- 村のカカシ：今の装備で試し打ちして、与える傷を測る ---------- */
+/* 体力は、毒のように「最大体力の何%」で削る効果の目安になる（普通の敵・強い敵・ボスくらい） */
+const DUMMY_LV = [1, 5, 10, 15], DUMMY_DEF = [0, 10, 20], DUMMY_HP = [100, 300, 1000];
+let DUMMY_D = null;
+function startDummy() {
+  const dl = G.dummy || (G.dummy = {lv:0, def:0, hp:0}); if (dl.hp == null) dl.hp = 0;
+  D = {dg:1, hero:G.hero || 'kai', depth:1, lv:DUMMY_LV[dl.lv] || 1, xp:0, gold:0, eq:{...G.load}, bag:G.pack.slice(), train:{...G.train}, bless:{},
+    kehai:0, poison:0, stand:(G.hero || 'kai') === 'kai', mode:'battle', pending:[], scene:null, battle:null, ev:null, curse:{}, child:null, dummy:true, track:{}};
+  D.hp = pst().maxHp;
+  const f = {k:'dummy', hk:'dummy', mk:'dummy', n:'カカシ', name:'カカシ', spr:'scarecrow', ai:'basic', ev:0, maxHp:DUMMY_HP[dl.hp] || 100, hp:DUMMY_HP[dl.hp] || 100, boss:dl.hp === 2, atk:0, def:DUMMY_DEF[dl.def] || 0, xp:0, g:0, depth:1, cd:0};
+  D.battle = {foes:[f], e:f, ctx:'dummy', turn:1, log:['カカシが立っている。好きなだけ打ち込もう。'], defDown:0, menu:false, fx:{}, bait:false, focus:0, focusNext:0};
+  chooseIntent();
+  D.dstat = {turns:0, total:0, max:0, last:0, by:{}};
+  DUMMY_D = D; G.screen = 'dummy';
+}
+function dummyHit(k, n = 1) {
+  if (!D || !D.dummy || !pst().skills.includes(k)) return;
+  const b = D.battle, f = b.foes[0];
+  for (let i = 0; i < n; i++) {
+    const h0 = f.hp; b.over = false;
+    battleAct('skill', k);
+    const d = h0 - f.hp;
+    f.hp = f.maxHp; b.over = false; D.mode = 'battle'; D.hp = pst().maxHp;
+    const st = D.dstat; st.turns++; st.total += d; if (st.turns <= 3) st.first3 = (st.first3 || 0) + d; st.last = d; st.max = Math.max(st.max, d);
+    const by = st.by[k] || (st.by[k] = {n:0, t:0}); by.n++; by.t += d;
+  }
+}
+function dummyLeave() { D = null; DUMMY_D = null; G.screen = 'town'; }
 function winBattle() {
+  if (D && D.dummy) { const b = D.battle; for (const f of b.foes) f.hp = f.maxHp; return; }
   const b = D.battle, S = pst();
   b.over = true;
   const L = [], hearts = [];
@@ -3418,10 +3891,10 @@ function winBattle() {
   const loot = [];
   for (const e of dead) {
     xp += e.xp || 0;
-    gold += Math.round(e.g * (.8 + R() * .4) * (1 + S.luck));
-    const matP = e.boss ? 1 : e.k === 'mimic' ? .5 : .6;
+    gold += Math.round(e.g * (.8 + R() * .4) * (1 + S.luck) * (S.bwk === 'bdagger' ? 1.5 : 1));
+    const matP = (e.boss ? 1 : e.k === 'mimic' ? .5 : .6) * (D.dg === 4 && !e.boss ? PRISON.matMul : 1);
     if (MATS[e.mk] && chance(matP)) loot.push(makeMat(e.mk));
-    let itemP = (e.elite ? .45 : .12) + (D.eq.weapon ? 0 : .05);
+    let itemP = ((e.elite ? .45 : .12) + (D.eq.weapon ? 0 : .05)) * (D.dg === 4 ? PRISON.itemMul : 1);
     if ((e.special && e.k !== 'executioner') || e.boss) itemP = 1;
     if (e.k === 'executioner') itemP = 0;
     if (chance(itemP)) {
@@ -3441,8 +3914,16 @@ function winBattle() {
     }
     questNote(e, b.ctx);
   }
+  if (dead.some(e => e.k === 'boxer')) loot.unshift(makeFist());
+  for (const e of dead) if (e.k === 'dragon' || e.k === 'abyssdragon') {
+    G.dragonSlain = true;
+    const parts = Object.keys(MATS).filter(k => MATS[k].dragon);
+    for (let i = 0, n = D.dg === 2 || D.dg === 3 ? 2 + rnd(2) : 1; i < n; i++) loot.unshift(makeMat(pick(parts)));
+  }
   if (dead.some(e => e.k === 'greedking')) { loot.push(makeTreasure('cup', ED() + 10), makeTreasure('crystal', ED() + 10)); L.push('強欲の王の腹から、財宝がこぼれ落ちた。'); }
+  for (const e of dead) if (e.k === 'greedking' && e.swallowed && e.swallowed.length) { loot.unshift(...e.swallowed); L.push(`強欲の王は、飲み込んだ${e.swallowed.map(itemName).join('、')}を吐き出した。`); e.swallowed = []; }
   if (dead.some(e => e.k === 'abyssdragon' && !e.abyss) && chance(.1)) { const r = makeRare('oblivion'); loot.unshift(r); L.push(`★${itemName(r)}`); }
+  if (D.dg === 4) { xp = Math.round(xp * PRISON.xp); if (chance(PRISON.potionP)) loot.push(makeCons('potion')); }
   if (xp) { D.xp += xp; L.push(`経験値 ${xp}`); }
   D.gold += gold; L.push(`金貨 ${gold}枚`);
   for (const it of loot) { D.pending.push(it); L.push(itemName(it)); }
@@ -3490,6 +3971,7 @@ function battleContinue() {
   D.battle = null;
   if (ctx === 'gate') { D.gateDone = true; advanceFloor([`${e.name}は崩れ落ち、閉ざされた扉が開いた。`]); if (G.screen === 'dive') D.mode = nextMode(); return; }
   if (ctx === 'final') { finishDive('clear'); return; }
+  if (ctx === 'mid') { D.midDone = D.midDone || {}; D.midDone[D.depth] = true; advanceFloor([`${e.name}を倒した。鉄格子の扉が開いた。`]); if (G.screen === 'dive') D.mode = nextMode(); return; }
   if (ctx === 'retreat') { D.retreat.log.push(`${names}を退けた。`); D.mode = nextMode(); return; }
   if (ctx === 'abyss') {
     D.gateClear = D.depth; D.lastGate = D.depth;
@@ -3512,7 +3994,7 @@ function retreatPlan(depth) {
 }
 function ambushP(f) {
   const wr = curWeight() / pst().cap, fe = D.dg === 3 ? 6 + (f - (D.lastGate || 0)) * .5 : f;
-  return clamp(.08 + fe * .045 + wr * .25 + D.kehai / 400 + (D.dg >= 2 ? .08 : 0), .05, .72);
+  return clamp(.08 + fe * .045 + wr * .25 + D.kehai / 400 + (hardDg(D.dg) ? .08 : 0), .05, .72);
 }
 /* 深層では、直前に開けた帰還の門まで歩いて戻る */
 function retreatPlanFor(depth) {
@@ -3708,14 +4190,14 @@ const STORY = {
 /* ---------- 危険度：裏の数値をまとめて 低・中・高 にする ---------- */
 /* その深さに出る魔物（重み付きの一覧）。強さは spawnEnemy と同じ式で、乱数なし */
 function foePool(depth) {
-  const dg = (D && D.dg) || 1, T = dg >= 2 ? TUNE2 : TUNE, pd = dg === 3 ? 2 : dg, vd = dg === 3 ? abyssVD(depth) : depth;
+  const dg = (D && D.dg) || 1, T = hardDg(dg) ? TUNE2 : TUNE, pd = poolDg(dg), vd = vdOf(dg, depth);
   const out = [];
   for (const k in MON) {
     const m = MON[k];
     if (m.boss || !m.lo || (m.d || 1) !== pd || m.lo > vd || (dg !== 3 && vd > m.hi)) continue;
     const f = 1 + (dg === 3 ? TUNE3.escale : T.escale) * (vd - m.lo);
     let hp = m.hp * f * T.ehp, atk = m.atk * f * T.eatk;
-    if (dg === 1 && depth <= 3 && TUNE.early < 1) { atk *= TUNE.early; hp *= (1 + TUNE.early) / 2; }
+    if ((dg === 1 || dg === 4) && vd <= 3 && TUNE.early < 1) { atk *= TUNE.early; hp *= (1 + TUNE.early) / 2; }
     out.push({k, w:1 + m.lo / 2, hp, atk, def:m.def * (1 + .05 * (vd - m.lo)), hk:m.base || k, depth:vd + DUNGEONS[dg].off});
   }
   return out;
@@ -3736,7 +4218,7 @@ function lossVs(e, S) {
   const edf = 100 / (100 + (e.def || 0) * 6);
   const ev = (sk, st) => {
     const m = matchup(sk.type, st, !!e.boss), ST = STANCE[st];
-    const deal = (S.atk + (sk.magic ? S.mag : 0)) * ((sk.mult || 0) * m.deal + (sk.own || 0)) * ((m.ignoreDef || sk.magic) ? 1 : edf) * (1 + S.crit * .5) + m.counter * S.atk * edf;
+    const deal = (S.atk + (sk.magic ? S.mag : 0)) * ((sk.mult || 0) * (sk.hits || 1) * m.deal + (sk.own || 0)) * ((m.ignoreDef || sk.magic) ? 1 : edf) * (1 + S.crit * .5) + m.counter * S.atk * edf;
     const take = e.atk * (ST.mult || 0) * (ST.hits || 1) * pdefF(S, ST.magic) * (m.interrupt ? 0 : m.take);
     return {deal, take};
   };
@@ -3759,9 +4241,9 @@ function lossVs(e, S) {
 function fightCostAt(depth, mult = 1) {
   const S = pst(), pool = foePool(depth), dg = (D && D.dg) || 1;
   if (!pool.length) return 0;
-  const base = dg === 3 ? 12 : dg === 2 ? 12 : 4;
+  const base = hardDg(dg) ? 12 : 4;
   let n = 0, c = 0;
-  for (const p of pool) { const e = {...p, cunBase:base + (dg === 3 ? abyssVD(depth) : depth)}; c += p.w * lossVs(e, S); n += p.w; }
+  for (const p of pool) { const e = {...p, cunBase:base + vdOf(dg, depth)}; c += p.w * lossVs(e, S); n += p.w; }
   return c / n * mult;
 }
 function fightCost(foe, mult = 1) {
@@ -3776,6 +4258,7 @@ function retreatRisk() { return atOpenGate() ? 0 : riskLevel(retreatCostFrom(D.d
 function nextBossFoe() {
   const dg = DG();
   if (dg.endless) return D.depth % 10 === 0 && D.gateClear !== D.depth ? spawnAbyssBoss(abyssBossAt(D.depth), D.depth) : null;
+  if (dg.mids && dg.mids.includes(D.depth) && !(D.midDone || {})[D.depth]) return spawnMidBoss(D.midSeq[dg.mids.indexOf(D.depth)], D.depth);
   const k = D.depth === dg.floors ? dg.last : D.depth === dg.gate && !D.gateDone ? dg.boss : null;
   if (!k) return null;
   return spawnBoss(k);
@@ -3809,11 +4292,13 @@ function abyssRecord(sc, type) {
 }
 function finishDive(type) {
   const abyss = D.dg === 3 ? abyssScore() : null;
-  const items = D.bag.concat(D.pending);
+  const prison = D.dg === 4, notLoan = it => !it.loan;
+  const items = D.bag.concat(D.pending).filter(notLoan);
   for (const it of collect(D)) delete it.b;
   G.gold += D.gold;
-  G.wh.push(...D.bag, ...D.pending);
-  G.load = {...D.eq};
+  G.wh.push(...D.bag.filter(notLoan), ...D.pending.filter(notLoan));
+  if (prison) { for (const k of SLOTS) if (D.eq[k] && !D.eq[k].loan) { G.wh.push(D.eq[k]); items.push(D.eq[k]); } }
+  else G.load = {...D.eq};
   G.returns++;
   G.stats = G.stats || {};
   const tr = D.track || {};
@@ -3822,14 +4307,14 @@ function finishDive(type) {
   if (curWeight() >= pst().cap * .95) unlock('greedy');
   const quest = questBank(type);
   let child = null;
-  if (D.child) { const h = makeHeart(D.child.type, 2); G.wh.push(h); G.seen[D.child.type] = 1; child = {type:D.child.type, item:itemName(h)}; }
+  if (D.child) { const h = makeHeart(D.child.type, 1); G.wh.push(h); G.seen[D.child.type] = 1; child = {type:D.child.type, item:itemName(h)}; }
   let abyssBest = false;
   if (abyss) { if (!((G.abyss || {}).recent || []).some(x => x.r === 'return')) cutinOnce('clear3'); abyssBest = abyssRecord(abyss, type); }
   G.heroClears = G.heroClears || {kai:{}, tamer:{}};
   if (type === 'clear') {
     const hc = G.heroClears[D.hero || 'kai'] = G.heroClears[D.hero || 'kai'] || {};
     hc[D.dg || 1] = (hc[D.dg || 1] || 0) + 1;
-    if (D.hero === 'tamer') unlock((D.dg || 1) === 2 ? 'tamer2' : 'tamer1');
+    if (D.hero === 'tamer' && !prison) unlock((D.dg || 1) === 2 ? 'tamer2' : 'tamer1');
   }
   if (!G.todon && items.some(x => x.k === 'rare' && RARES[x.type].box)) { G.todon = {met:false}; G.shopNews = '町の外れに、頭に鳥をかぶり、肩にインコを乗せた男が店を開いた。看板には「宝箱開封屋」とある。'; }
   if (G.tamerMet && !(G.unlocked || {}).tamer && D.bossKill) {
@@ -3837,7 +4322,8 @@ function finishDive(type) {
     G.wh.push(makeWeapon('whip', 1));
     G.heroNews = '魔物使いのミオが町にやってきた！ 主人公に選べるようになった（手土産に銅の鞭をくれた）';
   }
-  if (type === 'clear') {
+  if (type === 'clear' && prison) { const r = REC(4); if (!r.cleared) cutinOnce('clear4'); r.cleared = true; r.clears = (r.clears || 0) + 1; unlock('prison'); }
+  else if (type === 'clear') {
     const dg = D.dg || 1, r = REC(dg); if (!r.cleared) cutinOnce(dg === 2 ? 'clear2' : 'clear1'); r.cleared = true; r.clears = (r.clears || 0) + 1;
     unlock(dg === 2 ? 'clear2' : 'clear1');
     if (tr.bare) unlock(dg === 2 ? 'bare2' : 'bare1');
@@ -3856,12 +4342,13 @@ function finishDive(type) {
 }
 function die(why) {
   if (D.battle) D.battle.over = true;
-  const lostAll = collect(D);
+  const lostAll = collect(D).concat(D.pending).filter(it => !it.loan);
   const brought = lostAll.filter(it => it.b && slotOf(it));
+  const keepBB = D.dg === 4 ? G.buyback : null;
   G.deaths++;
   const abyss = D.dg === 3 ? {...abyssScore(), score:0} : null;
   if (abyss) abyssRecord(abyss, 'death');
-  G.buyback = brought.length ? {items:brought.map(it => { const c = {...it}; delete c.b; return c; })} : null;
+  G.buyback = D.dg === 4 ? keepBB : brought.filter(it => !it.issued).length ? {items:brought.filter(it => !it.issued).map(it => { const c = {...it}; delete c.b; return c; })} : null;
   G.stats = G.stats || {};
   G.stats.mikiriBest = Math.max(G.stats.mikiriBest || 0, (D.track && D.track.mikiri) || 0);
   G.result = {type:'death', dg:D.dg || 1, depth:D.depth, gold:D.gold, carried:D.carried || 0, items:lostAll, why, lv:D.lv, abyss, lostChild:D.child ? D.child.type : null};
@@ -3882,7 +4369,8 @@ const ACH = [
   {id:'notrain1', n:'鍛錬いらず',       d:'訓練所を使わずに、始まりの迷宮を踏破する'},
   {id:'bare2',    n:'身ひとつで深淵へ', d:'装備・道具・金貨を何も持ち込まずに、黄昏の深淵を踏破する'},
   {id:'notrain2', n:'深淵に鍛錬いらず', d:'訓練所を使わずに、黄昏の深淵を踏破する'},
-  {id:'outlaw',   n:'無頼漢',           d:'何も持ち込まず、訓練も受けずに、どちらかの迷宮を踏破する'},
+  {id:'outlaw',   n:'無頼漢',       d:'何も持ち込まず、訓練も受けずに、始まりの迷宮か黄昏の深淵を踏破する'},
+  {id:'prison',   n:'新チャンピオン',           d:'試しの地下牢を踏破する'},
   {id:'nopotion', n:'薬いらず',         d:'回復薬・上回復薬を一度も使わずに、どちらかの迷宮を踏破する'},
   {id:'sprint',   n:'一直線',           d:'一度も探索せずに、どちらかの迷宮を踏破する'},
   {id:'flawless', n:'無傷の主討伐',     d:'迷宮の主との戦いで、一度も傷を受けずに倒す'},
@@ -4064,6 +4552,10 @@ const ENCH = {
   antidote:{on:'a',  mats:{snake:2, spider:1}},
   master:  {on:'wa', mats:{golem:1, knight:2}},
   sight:   {on:'wa', mats:{bat:2, spider:1}},
+  greed:   {on:'wa', mats:{greedking:1, goblin:2}},
+  shade:   {on:'wa', mats:{shadowking:1, shadow:1}},
+  hands:   {on:'w',  mats:{witch:1, ghost:2}},
+  grit:    {on:'a',  mats:{boxer:1, orc:1}},
 };
 function gearTier(it) { return it.k === 'weapon' ? it.tier : ARMORS[it.type].tier; }
 function enchGold(it) { return 60 * gearTier(it); }
@@ -4196,7 +4688,7 @@ function vTown() {
   const S = townStats(), w = townWeight(), tr = Object.keys(G.train);
   return `
   <header class="top">
-    <div><p class="eyebrow">井戸の町</p><h1 class="title">引き際の迷宮</h1></div>
+    <div><p class="eyebrow">井戸の町</p><h1 class="title">引き際の迷宮</h1><p class="ver">ver0.99</p></div>
     <div class="hbtns">${achBtn()}<div class="purse">${sp('coin', '', 20)}<b>${G.gold}</b><span>金貨</span></div></div>
   </header>
   ${G.news ? `<p class="news">${G.news}</p>` : ''}
@@ -4216,6 +4708,7 @@ function vTown() {
   </section>
   ${dgCard(1)}
   ${G.cleared ? dgCard(2) : `<p class="locked">${sp('stairs', '', 18, 'dim')}<span>第二の迷宮　始まりの迷宮を踏破すると道が開くという</span></p>`}
+  ${G.cleared ? dgCard(4) : ''}
   ${REC(2).cleared ? dgCard(3) : G.cleared ? `<p class="locked">${sp('stairs', '', 18, 'dim')}<span>？？？　黄昏の深淵を踏破すると、さらに下への道が開くという</span></p>` : ''}
   ${questCard()}
   <section class="facil">
@@ -4225,10 +4718,14 @@ function vTown() {
     ${tile('buyback', 'candle', '', '遺品回収屋', G.buyback ? '取り戻せる遺品がある' : '今は預かり物なし', !!G.buyback)}
     ${tile('kennel', 'heart', 'pink', '魔物小屋', `こころを重ねる・図鑑 ${Object.keys(HEARTS).filter(k => !HEARTS[k].tamerOnly && (G.seen || {})[k]).length}/${Object.keys(HEARTS).filter(k => !HEARTS[k].tamerOnly).length}`)}
     ${tile('prep', 'chest', '', '倉庫', '装備と持ち物を選ぶ')}
+    <button class="tile" data-a="dummyGo">${sp('scarecrow', '', 36)}<span class="t-name">カカシ</span><span class="t-sub">今の装備で試し打ち</span></button>
     ${G.todon ? tile('todon', 'todon', '', '宝箱開封屋', todonBoxes().length ? `宝箱が${todonBoxes().length}個ある` : '宝箱を開けてもらう', !G.todon.met || todonBoxes().length > 0) : ''}
   </section>
   <footer class="foot">
     <span>潜った回数 ${G.dives}</span><span>帰還 ${G.returns}</span><span>力尽きた ${G.deaths}</span>
+    <button class="link" data-a="issueToggle">支給品：${G.noIssue ? '受け取らない' : '手元にないとき受け取る'}</button>
+    <button class="link" data-a="patch">更新情報</button>
+    <button class="link" data-a="snd">音楽：${SND_N[sndLv()]}</button>
     <button class="link" data-a="ciMode">出現演出：${CI_MODE_N[G.ciMode || 'first']}</button>
     <button class="link" data-a="spell">ふっかつのじゅもん</button>
     <button class="link${U.resetArmed ? ' armed' : ''}" data-a="reset">${U.resetArmed ? 'もう一度押すと最初から' : '最初からやり直す'}</button>
@@ -4251,6 +4748,14 @@ function dgCard(dg) {
       <span class="cbtns"><button class="btn xs" data-a="carry" data-v="0">0</button><button class="btn xs" data-a="carry" data-v="-50">−50</button><button class="btn xs" data-a="carry" data-v="50">＋50</button><button class="btn xs" data-a="carry" data-v="all">全部</button></span></div>` : ''}
     <button class="btn ${sel ? 'primary' : ''} wide" data-a="prepFor" data-v="3">${sel ? '潜る準備をする' : 'こちらに潜る'}</button>
   </section>`;
+  if (dg === 4) return `<section class="card dungeon d4">
+    <div class="dg-head">${sp('boxer', '', 44)}<div><h2>${Dg.n}</h2><p class="muted">全15階。町の物は何ひとつ持ち込めない、身ひとつで戦い抜くタフガイのためのダンジョン。環境利用闘法をマスターせよ！</p></div></div>
+    <ul class="facts">
+      <li><span>最深到達</span><b>${r.best ? `地下${r.best}階` : 'まだ入っていない'}</b></li>
+      <li><span>踏破</span><b class="${r.cleared ? 'gold' : ''}">${r.cleared ? `達成（${r.clears}回）` : '未踏破'}</b></li>
+    </ul>
+    <button class="btn ${sel ? 'primary' : ''} wide" data-a="prepFor" data-v="4">${sel ? '何も持たずに入る' : 'こちらに挑む'}</button>
+  </section>`;
   const desc = dg === 1 ? '全10階。5階に門番、最深部に竜が棲むという' : '全12階。6階に黒曜の巨像、最深部に冥王竜。強い装備がなければ生きて帰れない';
   return `<section class="card dungeon${dg === 2 ? ' d2' : ''}">
     <div class="dg-head">${sp(dg === 1 ? 'stairs' : 'abyssdragon', '', 44)}<div><h2>${Dg.n}</h2><p class="muted">${desc}</p></div></div>
@@ -4266,6 +4771,20 @@ function dgCard(dg) {
 }
 function tile(scr, spr, tint, name, sub, alert) {
   return `<button class="tile${alert ? ' alert' : ''}" data-a="goto" data-v="${scr}">${sp(spr, tint, 36)}<span class="t-name">${name}</span><span class="t-sub">${sub}</span></button>`;
+}
+function vDummy() {
+  const S = pst(), st = D.dstat, b = D.battle, f = b.foes[0], dl = G.dummy;
+  const avg = st.turns ? Math.round(st.total / st.turns * 10) / 10 : 0;
+  const rows = Object.entries(st.by).map(([k, x]) => `<li><span>${SKILLS[k].n}</span><b>${x.n}回　平均 ${Math.round(x.t / x.n * 10) / 10}</b></li>`).join('');
+  return `<header class="sub"><button class="back" data-a="dummyBack">← 町へ</button><h2>カカシ</h2><div class="purse sm">${sp('coin', '', 16)}<b>${G.gold}</b></div></header>
+  <section class="card dummy">
+    <div class="npc">${sp('scarecrow', '', 64)}<div class="say"><p>今の装備・訓練・こころのまま、カカシに打ち込める。カカシは反撃しない。</p><p class="muted small">毒・炎・急所・気迫もそのまま乗る。レベルは潜行中のレベル。毒は相手の最大体力の割合で削るので、カカシの体力で変わる。ボスにすると、毒は本番と同じく半分になる。本番の戦いは3ターンほどで終わることが多いので、「最初の3ターン」も目安に。</p></div></div>
+    <div class="dopts"><button class="btn sm" data-a="dummyLv">レベル ${DUMMY_LV[dl.lv]}</button><button class="btn sm" data-a="dummyHp">カカシ：${['普通の敵', '強い敵', 'ボス'][dl.hp || 0]}（体力${DUMMY_HP[dl.hp || 0]}）</button><button class="btn sm" data-a="dummyDef">カカシの守り ${DUMMY_DEF[dl.def]}</button><button class="btn sm" data-a="dummyReset">記録を消す</button></div>
+    <ul class="dstat"><li><span>打った回数</span><b>${st.turns}</b></li><li><span>与えた傷の合計</span><b>${st.total.toLocaleString()}</b></li><li><span>1ターンの平均</span><b>${avg}</b></li>${st.turns >= 3 ? `<li><span>最初の3ターンの合計</span><b>${st.first3 || 0}</b></li>` : ''}<li><span>いちばん大きい傷</span><b>${st.max}</b></li><li><span>直前の傷</span><b>${st.last}</b></li>${f.poison > 0 ? `<li><span>カカシの毒</span><b>${FOE_POISON.n[(f.pLv || 1) - 1]}</b></li>` : ''}${b.kiai ? `<li><span>王者の気迫</span><b>+${b.kiai * 15}%</b></li>` : ''}</ul>
+    ${rows ? `<p class="eyebrow">技ごと</p><ul class="dstat">${rows}</ul>` : ''}
+  </section>
+  <section class="dacts">${S.skills.map(k => { const sk = SKILLS[k]; return `<div class="dact"><button class="act" data-a="dummyHit" data-v="${k}"><span class="an">${sk.n}${tyChip(sk.type)}</span><span class="ad">${sk.d}</span></button><button class="btn sm" data-a="dummyHit10" data-v="${k}">10回</button></div>`; }).join('')}</section>
+  <section class="card"><div class="dlog">${b.log.slice(-6).map(l => `<p>${l}</p>`).join('')}</div></section>`;
 }
 function subHead(title) {
   return `<header class="sub"><button class="back" data-a="goto" data-v="town">← 町へ</button><h2>${title}</h2><div class="purse sm">${sp('coin', '', 16)}<b>${G.gold}</b></div></header>`;
@@ -4377,7 +4896,7 @@ function vShop() {
     const loot = G.wh.filter(it => it.k === 'treasure' && !it.fav && it.type !== 'junk');
     const sum = loot.reduce((s, it) => s + sellPrice(it), 0);
     body = (loot.length ? `<button class="btn primary wide" data-a="sellLoot">宝をまとめて売る（${sum}金貨）</button>` : '')
-      + sortBar() + (G.wh.length ? sortItems(G.wh, U.sort).map(it => `<div class="irow"><button class="ibtn" data-a="sel" data-v="wh:${it.id}" aria-label="詳しく見る">${itemImg(it, 36)}</button><span class="ibody">${nameHTML(it)}<span class="isub">${KIND_N[it.k]}</span></span>${it.fav ? '<button class="btn sm" disabled>お気に入り</button>' : it.k === 'rare' && RARES[it.type].quest ? '<button class="btn sm" disabled>依頼の品</button>' : it.k === 'rare' && RARES[it.type].box ? '<button class="btn sm" disabled>開封屋で開ける</button>' : `<button class="btn sm" data-a="sell" data-v="${it.id}">売る ${sellPrice(it)}</button>`}</div>`).join('') : `<p class="empty">倉庫は空っぽだ。</p>`)
+      + sortBar() + (G.wh.length ? sortItems(G.wh, U.sort).map(it => `<div class="irow"><button class="ibtn" data-a="sel" data-v="wh:${it.id}" aria-label="詳しく見る">${itemImg(it, 36)}</button><span class="ibody">${nameHTML(it)}<span class="isub">${KIND_N[it.k]}</span></span>${it.fav ? '<button class="btn sm" disabled>お気に入り</button>' : it.k === 'rare' && RARES[it.type].quest ? '<button class="btn sm" disabled>依頼の品</button>' : it.k === 'rare' && RARES[it.type].box ? '<button class="btn sm" disabled>開封屋で開ける</button>' : isBossMat(it) ? `<button class="btn sm${U.sellArm === it.id ? ' danger' : ''}" data-a="sell" data-v="${it.id}">${U.sellArm === it.id ? 'もう一度押すと売る' : `売る ${sellPrice(it)}`}</button>` : `<button class="btn sm" data-a="sell" data-v="${it.id}">売る ${sellPrice(it)}</button>`}</div>`).join('') : `<p class="empty">倉庫は空っぽだ。</p>`)
       + `<p class="muted small">装備中の品は、倉庫で外してから売れる。素材はエンチャントに使うので、まとめ売りには含まれない（1つずつなら売れる）。がらくたと★お気に入りの宝も含まれない。</p>`;
   }
   return subHead('店') + `<div class="tabs"><button class="tab${tab === 'buy' ? ' on' : ''}" data-a="shopTab" data-v="buy">買う</button><button class="tab${tab === 'sell' ? ' on' : ''}" data-a="shopTab" data-v="sell">売る</button></div><section class="card">${body}</section>`;
@@ -4385,7 +4904,17 @@ function vShop() {
 function vSmith() {
   const gear = [G.load.weapon, G.load.armor].filter(Boolean).concat(sortItems(G.wh.filter(it => it.k === 'weapon' || it.k === 'armor'), 'kind'));
   const tab = U.smithTab || 'forge';
-  const tabs = `<div class="tabs"><button class="tab${tab === 'forge' ? ' on' : ''}" data-a="smithTab" data-v="forge">鍛える</button><button class="tab${tab === 'ench' ? ' on' : ''}" data-a="smithTab" data-v="ench">エンチャント</button></div>`;
+  const tabs = `<div class="tabs"><button class="tab${tab === 'forge' ? ' on' : ''}" data-a="smithTab" data-v="forge">鍛える</button><button class="tab${tab === 'ench' ? ' on' : ''}" data-a="smithTab" data-v="ench">エンチャント</button>${smithSpecialOpen() ? `<button class="tab${tab === 'dragon' ? ' on' : ''}" data-a="smithTab" data-v="dragon">特別な武器</button>` : ''}</div>`;
+  if (tab === 'dragon' && smithSpecialOpen()) {
+    const C = DRAGON_W_COST;
+    const rows = Object.keys(DRAGON_W).map(p => {
+      const W = DRAGON_W[p], st = dragonCraftState(p), have = matCount(p), bases = dragonBases(p).length, armed = U.dcraftArm === p;
+      const sample = {k:'weapon', type:W.type, tier:C.tier, aff:[], plus:0, dw:p};
+      const baseN = W.type === 'flame' ? 'どれでもよい魔鋼の武器' : `魔鋼の${WEAPONS[W.type].n}`;
+      return `<div class="irow">${itemImg(sample, 36)}<span class="ibody"><span>${W.n}</span><span class="isub">攻撃 ${weaponAtk(sample)}〜　${W.d}</span><span class="isub"><span class="mat${have >= C.parts ? ' ok' : ''}">${sp(MATS[p].spr, MATS[p].tint || '', 16)}${MATS[p].n} ${have}/${C.parts}</span>　<span class="${bases ? 'up' : 'down'}">${baseN} ${bases ? '○' : '×'}</span>　${C.gold}金貨</span></span><button class="btn sm${armed ? ' danger' : ''}" data-a="dcraft" data-v="${p}" ${st === 'ok' ? '' : 'disabled'}>${st === 'ok' ? (armed ? 'もう一度押して作る' : '作る') : st === 'mats' ? '部位不足' : st === 'base' ? '武器なし' : '金貨不足'}</button></div>`;
+    }).join('');
+    return subHead('鍛冶屋') + tabs + (G.news ? `<p class="news">${G.news}</p>` : '') + `<section class="card"><div class="npc">${sp('smithdad', '', 40)}<p>親方「竜の部位が2つと、土台にする魔鋼の武器が1本、それに金貨${C.gold}枚。それだけあれば、竜の武器を打ってやる。土台は溶かすから戻らんぞ」</p></div>${rows}<p class="muted small">土台は倉庫の中の、お気に入りでない魔鋼の武器から、いちばん安いものを使う。</p></section>` + bossRows();
+  }
   if (tab === 'ench') {
     const stones = oblivionCount();
     const rows = gear.map(it => {
@@ -4396,7 +4925,7 @@ function vSmith() {
       }
       return `<button class="irow" data-a="enchPick" data-v="${it.id}">${itemImg(it, 36)}<span class="ibody"><span>${nameHTML(it)}${eqd ? '<span class="tag">装備中</span>' : ''}</span><span class="isub">まだ付けられる　${enchGold(it)}金貨＋素材</span></span><span class="chev">›</span></button>`;
     }).join('');
-    return subHead('鍛冶屋') + tabs + `<section class="card"><div class="npc">${sp('crystal', 'purple', 40)}<p>親方の娘「好きな力を一つだけ、刻んであげる。一度刻んだら二度と変えられないから、よく選んでね。力の種類で、使う素材が違うよ」</p></div>${rows || `<p class="empty">武器や防具がない。</p>`}<p class="muted small">素材は魔物を倒すと落とす。装飾品とこころには付けられない。${stones ? `忘却の砥石を${stones}つ持っている。刻んだエンチャントを剥がすと、もう一度刻める。` : '刻んだエンチャントは、忘却の砥石がないと剥がせない。'}</p></section>`;
+    return subHead('鍛冶屋') + tabs + `<section class="card"><div class="npc">${sp('smithgirl', '', 40)}<p>親方の娘「好きな力を一つだけ、刻んであげる。一度刻んだら二度と変えられないから、よく選んでね。力の種類で、使う素材が違うよ」</p></div>${rows || `<p class="empty">武器や防具がない。</p>`}<p class="muted small">素材は魔物を倒すと落とす。装飾品とこころには付けられない。${stones ? `忘却の砥石を${stones}つ持っている。刻んだエンチャントを剥がすと、もう一度刻める。` : '刻んだエンチャントは、忘却の砥石がないと剥がせない。'}</p></section>`;
   }
   const rows = gear.map(it => {
     const lim = smithLimit(it), max = it.plus >= lim, c = smithCost(it), lab = it.k === 'weapon' ? '攻撃' : '防御';
@@ -4407,7 +4936,19 @@ function vSmith() {
     const needLine = need ? `<span class="isub${short ? ' down' : ' up'}">限界突破：${MATS[need.mat].n} ${have} / ${need.n}</span>` : '';
     return `<div class="irow">${itemImg(it, 36)}<span class="ibody">${nameHTML(it)}${eqd ? '<span class="tag">装備中</span>' : ''}<span class="isub">${max ? `${lab} ${cur}　この品は+${lim}が限界` : `${lab} ${cur} → <b class="up">${nxt}</b>　（+${lim}まで）`}</span>${needLine}</span><button class="btn sm" data-a="smith" data-v="${it.id}" ${max || G.gold < c || short ? 'disabled' : ''}>${max ? '最大' : c + '金貨'}</button></div>`;
   }).join('');
-  return subHead('鍛冶屋') + tabs + (G.news ? `<p class="news">${G.news}</p>` : '') + `<section class="card"><div class="npc">${sp('anvil', '', 40)}<p>親方「鍛えられる限界は素材の格で決まる。銅なら+2、鉄なら+3だ。+5まで鍛えた品なら、竜の鱗で限界の先へ行ける。+6は深淵竜の鱗、+7は冥王竜の逆鱗が2枚ずつ要る」</p></div>${rows || `<p class="empty">鍛えられる武器や防具がない。</p>`}</section>`;
+  return subHead('鍛冶屋') + tabs + (G.news ? `<p class="news">${G.news}</p>` : '') + `<section class="card"><div class="npc">${sp('smithdad', '', 40)}<p>親方「鍛えられる限界は素材の格で決まる。銅なら+2、鉄なら+3だ。+5まで鍛えた品なら、竜の鱗で限界の先へ行ける。+6は深淵竜の鱗、+7は冥王竜の逆鱗が2枚ずつ要る」</p></div>${rows || `<p class="empty">鍛えられる武器や防具がない。</p>`}</section>`;
+}
+/* 特別な武器の欄：竜を初めて倒したら開く（中ボスの素材を持っていても開く） */
+function smithSpecialOpen() { return !!(G.dragonSlain || G.cleared || G.wh.some(x => x.k === 'mat' && (MATS[x.type].dragon || BOSS_W.bstaff.mats[x.type]))); }
+function bossRows() {
+  if (!['shadowking', 'witch', 'greedking'].some(m => matCount(m)) && !G.wh.some(x => x.bw) && !G.load.weapon?.bw) return '';
+  const rows = Object.keys(BOSS_W).map(k => {
+    const W = BOSS_W[k], st = bossCraftState(k), armed = U.bcraftArm === k;
+    const sample = {k:'weapon', type:W.type, tier:DRAGON_W_COST.tier, aff:[], plus:0, bw:k};
+    const mats = Object.entries(W.mats).map(([m, n]) => { const have = matCount(m); return `<span class="mat${have >= n ? ' ok' : ''}">${sp(MATS[m].spr, MATS[m].tint || '', 16)}${MATS[m].n} ${have}/${n}</span>`; }).join(' ');
+    return `<div class="irow">${itemImg(sample, 36)}<span class="ibody"><span>${W.n}</span><span class="isub">攻撃 ${weaponAtk(sample)}〜　${W.d}</span><span class="isub">${mats}</span></span><button class="btn sm${armed ? ' danger' : ''}" data-a="bcraft" data-v="${k}" ${st === 'ok' ? '' : 'disabled'}>${st === 'ok' ? (armed ? 'もう一度押して作る' : '作る') : '素材不足'}</button></div>`;
+  }).join('');
+  return `<section class="card"><div class="npc">${sp('smithgirl', '', 40)}<p>親方の娘「影の王に千手の魔女、強欲の王……地下牢の主たちの素材？ すごいちからを秘めているね！」</p></div>${rows}</section>`;
 }
 function vEnchSheet(id) {
   const it = smithFind(id); if (!it) return '';
@@ -4555,7 +5096,7 @@ function vResult() {
   const r = G.result;
   const T = {
     return:['帰還した', r.dg === 3 ? '深層から生きて戻った。持ち帰った物は倉庫に収めた。' : '無事に地上へ戻った。持ち帰った物は倉庫に収めた。'],
-    death:['力尽きた', `${r.why}。持っていた物は、すべて迷宮に消えた。`],
+    death:['力尽きた', r.dg === 4 ? `${r.why}。地下牢で拾った物は失ったが、町に預けた物は無事だ。` : `${r.why}。持っていた物は、すべて迷宮に消えた。`],
     clear:['迷宮を踏破した', DUNGEONS[r.dg || 1].last ? `${MON[DUNGEONS[r.dg || 1].last].n}を討ち取り、地上へ凱旋した！` : ''],
   }[r.type];
   const spr = r.type === 'death' ? 'remains' : r.type === 'clear' ? 'cup' : 'exit';
@@ -4640,9 +5181,11 @@ function vFloor() {
     if (gateBoss) { const k = abyssBossAt(D.depth); bossSpr = MON[k].spr; dl = [`${MON[k].n}に挑む`, '倒せば帰還の門が開く。倒さなければ先へは進めない']; }
     else dl = ['奥に進む', nextHint(S)];
   } else {
+    const midK = dg.mids && dg.mids.includes(D.depth) && !(D.midDone || {})[D.depth] ? D.midSeq[dg.mids.indexOf(D.depth)] : null;
     const isLast = D.depth === dg.floors, isGate = D.depth === dg.gate && !D.gateDone;
+    if (midK) bossSpr = MON[midK].spr;
     if (isLast || isGate) bossSpr = MON[isLast ? dg.last : dg.boss].spr;
-    dl = isLast ? [`${MON[dg.last].n}に挑む`, 'この迷宮の主が待っている'] : isGate ? [`${MON[dg.boss].n}に挑む`, '倒さなければ先へは進めない'] : ['奥に進む', nextHint(S)];
+    dl = midK ? [`${MON[midK].n}に挑む`, '倒さなければ先へは進めない'] : isLast ? [`${MON[dg.last].n}に挑む`, 'この迷宮の主が待っている'] : isGate ? [`${MON[dg.boss].n}に挑む`, '倒さなければ先へは進めない'] : ['奥に進む', nextHint(S)];
   }
   const gate = atOpenGate();
   const rl = gate ? ['帰還の門から帰る', '光の道を通って、安全に地上へ戻れる'] : ['撤退する', retreatHint()];
@@ -4669,16 +5212,16 @@ function vCard(S) {
 function vMerchant(S) {
   const w = curWeight();
   return scene(D.scene) + `<section class="choices">` + D.ev.offers.map((o, i) => {
-    const heavy = w + itemWt(o.item) > S.cap, poor = D.gold < o.price;
+    const p = offerPrice(o), heavy = w + itemWt(o.item) > S.cap, poor = D.gold < p;
     const why = o.sold ? '買った' : heavy ? '重すぎて持てない' : poor ? '金貨が足りない' : itemLines(o.item)[0];
-    return `<button class="choice" data-a="merchant" data-v="${i}" ${o.sold || heavy || poor ? 'disabled' : ''}>${itemImg(o.item, 36)}<span class="cbody"><span class="clbl">${nameHTML(o.item)}を買う（${o.price}金貨）</span><span class="chint">${why}</span></span></button>`;
+    return `<button class="choice" data-a="merchant" data-v="${i}" ${o.sold || heavy || poor ? 'disabled' : ''}>${itemImg(o.item, 36)}<span class="cbody"><span class="clbl">${nameHTML(o.item)}を買う（${p}金貨${p < o.price ? ` <s>${o.price}</s>` : ''}）</span><span class="chint">${why}</span></span></button>`;
   }).join('') + `</section>` + vMerchantSell() + `<section class="choices">` + choice('mleave', 'exit', '', '立ち去る', '行商人と別れる') + `</section>`;
 }
 function vMerchantSell() {
   const groups = groupItems(sortItems(D.bag, 'kind'));
   const rows = groups.map(({it, n}) => {
-    const p = merchantPrice(it), ok = merchantCanSell(it), gear = !stackable(it) || it.k === 'rare', armed = U.msellArm === it.id;
-    const btns = !ok ? `<button class="btn sm" disabled>${it.fav ? 'お気に入り' : '売れない'}</button>`
+    const p = merchantPrice(it), ok = merchantCanSell(it), gear = !stackable(it) || it.k === 'rare' || isBossMat(it), armed = U.msellArm === it.id;
+    const btns = !ok ? `<button class="btn sm" disabled>${it.fav ? 'お気に入り' : it.issued ? '支給品' : '売れない'}</button>`
       : gear ? `<button class="btn sm${armed ? ' danger' : ''}" data-a="msell" data-v="${it.id}">${armed ? 'もう一度押すと売る' : `売る ${p}`}</button>`
       : `<button class="btn sm" data-a="msell" data-v="${it.id}">${n > 1 ? '1つ' : '売る'} ${p}</button>${n > 1 ? `<button class="btn sm" data-a="msellAll" data-v="${it.id}">全部 ${p * n}</button>` : ''}`;
     return `<div class="irow">${itemImg(it, 36)}<span class="ibody">${nameHTML(it)}${n > 1 ? ` ×${n}` : ''}<span class="isub">${KIND_N[it.k]}　町なら ${sellPrice(it)}</span></span><span class="msell-btns">${btns}</span></div>`;
@@ -4728,7 +5271,7 @@ function vBattle(S) {
     }).join('') : `<p class="empty">使える道具がない。</p>`}<button class="btn ghost wide" data-a="bmenu">戻る</button></section>`;
   } else {
     const wimg = D.eq.weapon ? itemImg(D.eq.weapon, 28) : sp(HERO_OF(D.hero).spr, '', 28);
-    actions = `<section class="acts">${S.skills.map(k => { const sk = SKILLS[k]; const img = sk.hk ? sp(MON[sk.hk].spr, '', 28) : wimg; return `<button class="act${sk.hk ? ' hsk' : ''}" data-a="skill" data-v="${k}">${img}<span class="an">${sk.n}${tyChip(sk.type)}${sk.hk ? `<small class="hlv">レベル${S.hearts[sk.hk]}</small>` : ''}</span><span class="ad">${sk.d}${sk.type === 'guard' && D.battle.guardRun ? `<br><b class="down">続けて守ると崩れやすい（${D.battle.guardRun + 1}回目）</b>` : ''}</span></button>`; }).join('')}
+    actions = `<section class="acts">${S.skills.map(k => { const sk = SKILLS[k]; const img = sk.hk ? sp(MON[sk.hk].spr, '', 28) : wimg; return `<button class="act${sk.hk ? ' hsk' : ''}" data-a="skill" data-v="${k}">${img}<span class="an">${sk.n}${tyChip(sk.type)}${sk.hk ? `<small class="hlv">レベル${S.hearts[sk.hk]}</small>` : ''}</span><span class="ad">${sk.d}${sk.type === 'guard' && D.battle.guardRun ? `<br><b class="down">続けて守ると崩れやすい（${D.battle.guardRun + 1}回目）</b>` : ''}${sk.type === 'dodge' && D.battle.dodgeRun ? `<br><b class="down">${D.battle.dodgeRun >= 2 ? '疲れている' : '次もかわすと、その次から疲れる'}</b>` : ''}</span></button>`; }).join('')}
       <button class="act" data-a="bmenu">${sp('potion', 'red', 28)}<span class="an">道具</span><span class="ad">${usable.length ? '道具を使う・武器を持ち替える' : '使える道具がない'}</span></button>
       <button class="act" data-a="flee" ${fp <= 0 ? 'disabled' : ''}>${sp('exit', '', 28)}<span class="an">逃げる</span><span class="ad">${fleeHint}</span></button></section>
       <button class="tipbtn" data-a="tips">${U.tips ? '読み合いのコツを隠す' : '読み合いのコツを見る'}</button>${U.tips ? tipsHTML() : ''}`;
@@ -4743,7 +5286,7 @@ function vBattle(S) {
     else if (f.read === 'sense') intent = `<p class="intent sense"><span class="stc">${STANCE[f.cands[0]].chip}？</span><span class="stc">${STANCE[f.cands[1]].chip}？</span>${fs.length > 1 ? 'どちらかで来る' : 'どちらかで来そうだ'}</p>`;
     else intent = `<p class="intent${I2.danger ? ' danger' : ''}${f.read === 'mikiri' ? ' mikiri' : ''}"><span class="stc">${I2.chip}</span>${f.read === 'mikiri' ? '<span class="mk">見切り</span>' : ''}${fs.length > 1 ? I2.t : `${f.name}は${I2.t}`}</p>`;
     const idx = b.foes.indexOf(f);
-    const inner = `<div class="foe-top"><h3>${f.name}${f.elite ? '<span class="tag r-epic">精鋭</span>' : ''}${f.boss ? '<span class="tag r-cursed">主</span>' : ''}${tgt ? '<span class="tag tg">狙い</span>' : ''}</h3>${bar(Math.max(0, f.hp), f.maxHp, 'ehp')}<span class="cun">狡猾さ ${foeCunning(f)}　（洞察 ${ins}）</span></div>
+    const inner = `<div class="foe-top"><h3>${f.name}${f.elite ? '<span class="tag r-epic">精鋭</span>' : ''}${f.boss ? '<span class="tag r-cursed">主</span>' : ''}${f.poison > 0 ? `<span class="pz">${FOE_POISON.n[(f.pLv || 1) - 1]}</span>` : ''}${tgt ? '<span class="tag tg">狙い</span>' : ''}</h3>${bar(Math.max(0, f.hp), f.maxHp, 'ehp')}<span class="cun">狡猾さ ${foeCunning(f)}　（洞察 ${ins}）</span></div>
       <div class="foe-pic">${sp(f.spr, '', fs.length > 1 ? 80 : 128, dead ? 'fallen' : fst === 'stagger' && f.read !== 'hidden' ? 'reel' : 'bob')}</div>${intent}`;
     return fs.length > 1 && !dead
       ? `<button class="foe multi${tgt ? ' target' : ''}${b.fx.enemyHit && f === b.e ? ' hit' : ''}" data-a="target" data-v="${idx}" aria-label="${f.name}を狙う">${inner}</button>`
@@ -4837,6 +5380,47 @@ function vStatsSheet() {
     <h3 class="sec">読み合いのコツ</h3>${tipsHTML()}
     <button class="btn ghost wide" data-a="close">閉じる</button>`;
 }
+/* ---------- 更新情報：新しい版を初めて開いたときに一度だけ出す ---------- */
+const PATCH = {id:'2026-10-31', date:'10月31日', groups:[
+  ['音', [
+    '迷宮・戦闘・村・宝箱開封屋にBGMが付いた。迷宮の曲は戦闘のあと続きから流れる',
+    '戦闘の効果音：武器ごとの攻撃の音、急所、守り、かわし、反撃、敵ごとの攻撃の音',
+    '勝利の音と、階段を降りる音',
+    '村の下の「音楽」で、切・小・中・大を選べる',
+  ]],
+  ['村', [
+    '「カカシ」を置いた。今の装備のまま試し打ちして、与える傷を測れる',
+    '鍛冶屋の親方と娘に絵が付いた',
+    '鍛冶屋に「特別な武器」の欄。竜を初めて倒すと開く',
+    'ボス・中ボス・竜の素材は、売るとき2回押す',
+  ]],
+  ['新しい武器', [
+    '竜の武器6種：竜の部位2つ・金貨1000枚・同じ種類の魔鋼の武器で作れる。それぞれ竜の力を持つ',
+    '龍肺の火筒：誰でも使える火の武器。炎を吐いて敵全体を焼く',
+    '地下牢の主たちの武器：影王の杖・千手の鞭・強欲の短刀。主たちの素材だけで作れる',
+  ]],
+  ['素材とエンチャント', [
+    '強欲の王・影の王・千手の魔女・名もなき拳闘士が、必ず素材を落とす',
+    'その素材でしか刻めないエンチャント：金運の・影縫いの・千手の・不屈の',
+    '竜を倒すと竜の部位が落ちる（黄昏の深淵の主と底なしの深層では2〜3個）',
+  ]],
+  ['戦い', [
+    '火の属性が加わった。炎の効き方は敵によって違う',
+    '吸い取りは守りでは減らせない。かわせば反撃できる',
+    'かわしを続けすぎると疲れて、かわしにくくなる',
+  ]],
+  ['迷宮', [
+    '行商人の品ぞろえが3〜4品に。金貨や宝をたくさん持っていると、行商人に会いやすい',
+    '行商人から買った装備は、その場所に何も着けていなければそのまま身に着ける',
+    '試しの地下牢の行商人は、前半に少なく後半に多い',
+    '底なしの深層の浅い階で落ちる装備を、黄昏の深淵の同じ強さの階に合わせた',
+    '斧と竜の武器の見た目を描き直した',
+  ]],
+]};
+function vPatchSheet() {
+  return `<h3>更新情報　${PATCH.date}</h3>` + PATCH.groups.map(([h, ls]) => `<p class="eyebrow">${h}</p><ul class="patch">${ls.map(l => `<li>${l}</li>`).join('')}</ul>`).join('')
+    + `<div class="sheet-acts"><button class="btn primary" data-a="close">閉じる</button></div>`;
+}
 function vSheet() {
   const s = U.sheet; if (!s) return '';
   let body = '';
@@ -4848,12 +5432,24 @@ function vSheet() {
   else if (s.t === 'ach') body = vAchSheet();
   else if (s.t === 'quest') body = vQuestSheet();
   else if (s.t === 'ench' && !G.dive) body = vEnchSheet(s.id);
+  else if (s.t === 'patch') body = vPatchSheet();
   if (!body) { U.sheet = null; return ''; }
   return `<div class="sheet-wrap" data-a="close"><div class="sheet" data-stop="1" role="dialog">${body}</div></div>`;
 }
 
 /* ---------- 操作 ---------- */
 const ACT = {
+  bcraft: v => { if (U.bcraftArm === v) { U.bcraftArm = null; bossCraft(v); } else U.bcraftArm = v; },
+  dcraft: v => { if (U.dcraftArm === v) { U.dcraftArm = null; dragonCraft(v); } else U.dcraftArm = v; },
+  patch: () => { U.sheet = {t:'patch'}; },
+  dummyGo: () => { startDummy(); },
+  dummyHit: v => { dummyHit(v); },
+  dummyHit10: v => { dummyHit(v, 10); },
+  dummyBack: () => { dummyLeave(); },
+  dummyReset: () => { startDummy(); },
+  dummyLv: () => { G.dummy.lv = (G.dummy.lv + 1) % DUMMY_LV.length; startDummy(); },
+  dummyHp: () => { G.dummy.hp = ((G.dummy.hp || 0) + 1) % DUMMY_HP.length; startDummy(); },
+  dummyDef: () => { G.dummy.def = (G.dummy.def + 1) % DUMMY_DEF.length; startDummy(); },
   goto: v => { G.screen = v; U.sheet = null; G.news = ''; if (v === 'shop' && !G.shop) refreshShop(); if (v === 'todon') todonGreet(); },
   todonOpen: v => { todonOpen(v); },
   toTown: () => { G.result = null; G.screen = 'town'; G.news = [G.heroNews, G.shopNews].filter(Boolean).join('　'); G.heroNews = ''; G.shopNews = ''; G.newAch = []; if (G.knight) G.knight.story = 0; },
@@ -4861,8 +5457,8 @@ const ACT = {
     if (G.screen === 'result') { G.result = null; G.heroNews = ''; G.shopNews = ''; G.newAch = []; }
     U.storyEp = +v || 0; U.sheet = null; G.screen = 'story';
   },
-  startDive: () => { if (townWeight() > townStats().cap) { G.news = '重すぎて出発できない。'; return; } G.news = ''; startDive(G.cleared ? (G.target || 1) : 1); },
-  prepFor: v => { const dg = +v; if (dg === 2 && !G.cleared) return; if (dg === 3 && !REC(2).cleared) return; if ((G.target || 1) !== dg) { G.target = dg; return; } G.screen = 'prep'; G.news = ''; },
+  startDive: () => { if ((G.target || 1) !== 4 && townWeight() > townStats().cap) { G.news = '重すぎて出発できない。'; return; } G.news = ''; startDive(G.cleared ? (G.target || 1) : 1); },
+  prepFor: v => { const dg = +v; if (dg === 2 && !G.cleared) return; if (dg === 3 && !REC(2).cleared) return; if (dg === 4 && !G.cleared) return; if ((G.target || 1) !== dg) { G.target = dg; return; } if (dg === 4) { G.news = ''; startDive(4); return; } G.screen = 'prep'; G.news = ''; },
   deeper: () => deeper(),
   evc: v => evChoice(v),
   explore: () => explore(),
@@ -4881,15 +5477,17 @@ const ACT = {
   tleave: () => tamerLeave(),
   fuse: v => fuse(v),
   mleave: () => { U.msellArm = null; merchantLeave(); },
-  msell: v => { const it = D && D.bag.find(x => x.id === v); if (!it) return; if ((!stackable(it) || it.k === 'rare') && U.msellArm !== v) { U.msellArm = v; return; } U.msellArm = null; merchantSell(v, false); },
+  msell: v => { const it = D && D.bag.find(x => x.id === v); if (!it) return; if ((!stackable(it) || it.k === 'rare' || isBossMat(it)) && U.msellArm !== v) { U.msellArm = v; return; } U.msellArm = null; merchantSell(v, false); },
   msellAll: v => { U.msellArm = null; merchantSell(v, true); },
+  issueToggle: () => { G.noIssue = !G.noIssue; },
+  snd: () => { G.snd = (sndLv() + 1) % SND_N.length; setTimeout(bgmApplyVol, 0); },
   ciMode: () => { const ks = Object.keys(CI_MODE_N); G.ciMode = ks[(ks.indexOf(G.ciMode || 'first') + 1) % ks.length]; },
   altarBlood: () => altarAct('blood'),
   altarGold: () => altarAct('gold'),
   altarLeave: () => altarAct('leave'),
   openBag: () => { U.sheet = {t:'bag'}; },
   openStats: () => { U.sheet = {t:'stats'}; },
-  close: () => { U.sheet = null; U.spellArmed = false; U.enchArm = null; },
+  close: () => { if (U.sheet && U.sheet.t === 'patch' && G.patchSeen !== PATCH.id) { G.patchSeen = PATCH.id; persist(); } (() => { U.sheet = null; U.spellArmed = false; U.enchArm = null; })(); },
   spell: () => {
     if (G.dive) return;
     U.sheet = {t:'spell', out:'', busy:true}; U.copied = false; U.spellArmed = false;
@@ -4937,7 +5535,7 @@ const ACT = {
   shopTab: v => { U.shopTab = v; },
   buyCons: v => buyCons(v),
   buyGear: v => buyGear(v),
-  sell: v => sellItem(v),
+  sell: v => { const it = G.wh.find(x => x.id === v); if (isBossMat(it) && U.sellArm !== v) { U.sellArm = v; return; } U.sellArm = null; sellItem(v); },
   sellLoot: () => sellLoot(),
   smith: v => smith(v),
   smithTab: v => { U.smithTab = v; U.stripArm = null; },
@@ -4981,14 +5579,7 @@ function render() {
     case 'dive': html = vDive(); break;
     case 'result': html = vResult(); break;
     case 'story': html = vStory(); break;
-  }
-  if (G.screen === 'dive' && D) {
-    const now = new Set(achLive().filter(a => a.kind === 'live').map(a => a.id));
-    if (U.liveDive === D && U.liveSet) {
-      const lost = [...U.liveSet].filter(id => !now.has(id) && !(G.ach || {})[id] && id !== 'greedy' && id !== 'flawless');
-      if (lost.length) { U.toast = {text:`実績「${lost.map(id => ACH.find(a => a.id === id).n).join('」「')}」の条件が外れた`, until:Date.now() + 3500}; setTimeout(render, 3600); }
-    }
-    U.liveDive = D; U.liveSet = now;
+    case 'dummy': html = D && D.dummy ? vDummy() : (G.screen = 'town', vTown()); break;
   }
   const toast = U.toast && Date.now() < U.toast.until ? `<div class="toast" role="status">${U.toast.text}</div>` : '';
   if (toast && !U.toastT) U.toastT = setTimeout(() => { U.toastT = null; render(); }, U.toast.until - Date.now() + 60);
@@ -4999,6 +5590,7 @@ function render() {
   U.lastScreen = key;
   if (D && D.battle) D.battle.fx = {};
   if (CIQ.length || U.boxShow) runCutins();
+  try { sndAfterRender(); } catch (e) {}
 }
 let ciBusy = false;
 async function runCutins() {
@@ -5016,7 +5608,7 @@ function onClick(ev) {
   const f = ACT[el.dataset.a]; if (!f) return;
   const a = el.dataset.a;
   f(el.dataset.v);
-  D = G.dive || null;
+  D = G.dive || (G.screen === 'dummy' ? DUMMY_D : null) || null;
   if (G.screen !== 'result' && G.screen !== 'dive') { checkAch(); announceAch(); }
   if (!NO_SAVE.has(a) || (a === 'reset' && !U.resetArmed)) persist();
   render();
@@ -5037,6 +5629,7 @@ function stripItem(it) {
   if (it.val) o.v = it.val;
   if (it.fav) o.f = 1;
   if (it.ench) o.e = it.ench;
+  if (it.issued) o.i = 1;
   return o;
 }
 function fromStrip(o) {
@@ -5051,6 +5644,7 @@ function fromStrip(o) {
   else if (o.k === 'rare' && RARES[o.t].box) { it.lv = clamp(o.l || 5, 1, 99); if (o.g >= 1 && o.g <= 3) { it.dg = o.g; it.fl = clamp(o.fl || 1, 1, 999); } }
   if (o.f) it.fav = true;
   if (o.e && ENCH[o.e] && (o.k === 'weapon' || o.k === 'armor')) it.ench = o.e;
+  if (o.i && (o.k === 'weapon' || o.k === 'armor')) it.issued = true;
   return it;
 }
 function spellData() {
@@ -5061,8 +5655,8 @@ function spellData() {
     d2:G.d2 ? [G.d2.best || 0, G.d2.gateKills || 0, G.d2.cleared ? 1 : 0, G.d2.clears || 0] : null, tg:G.target || 1, cr:G.carry || 0, ps:G.preset || null,
     hr:G.hero || 'kai', ul:G.unlocked || {}, tm:G.tamerMet ? 1 : 0, hc:G.heroClears || null,
     kn:G.knight && G.knight.ep ? [G.knight.ep, G.knight.prog || [], G.knight.done || []] : null, ks:G.knightSeek || 0,
-    ab:G.abyss ? {b:G.abyss.best, r:(G.abyss.recent || []).slice(0, 10)} : null, d3:G.d3 ? G.d3.best || 0 : 0,
-    td:G.todon ? [G.todon.met ? 1 : 0, G.todon.opened || 0] : null, cm:G.ciMode || null, ci:Object.keys(G.ciSeen || {}), ac:G.ach ? Object.fromEntries(Object.entries(G.ach).map(([k, t]) => [k, Math.floor(t / 1000)])) : null, sx:G.stats || null};
+    ab:G.abyss ? {b:G.abyss.best, r:(G.abyss.recent || []).slice(0, 10)} : null, d3:G.d3 ? G.d3.best || 0 : 0, d4:G.d4 ? [G.d4.best || 0, G.d4.cleared ? 1 : 0, G.d4.clears || 0] : null,
+    td:G.todon ? [G.todon.met ? 1 : 0, G.todon.opened || 0] : null, ni:G.noIssue ? 1 : 0, cm:G.ciMode || null, ci:Object.keys(G.ciSeen || {}), ac:G.ach ? Object.fromEntries(Object.entries(G.ach).map(([k, t]) => [k, Math.floor(t / 1000)])) : null, sx:G.stats || null};
 }
 function gameFrom(d) {
   if (!d || d.v !== 1 || typeof d.g !== 'number' || !Array.isArray(d.w)) throw new Error('bad');
@@ -5081,24 +5675,26 @@ function gameFrom(d) {
     g.abyss.recent = (Array.isArray(d.ab.r) ? d.ab.r : []).slice(0, 10).filter(r => r && HEROES[r.h]).map(r => ({h:r.h, s:Math.max(0, Math.floor(+r.s || 0)), d:Math.max(0, Math.floor(+r.d || 0)), r:r.r === 'death' ? 'death' : 'return'}));
   }
   if (d.d3) g.d3 = {best:Math.max(0, Math.floor(+d.d3 || 0))};
+  if (Array.isArray(d.d4)) g.d4 = {best:Math.max(0, Math.floor(+d.d4[0] || 0)), cleared:!!d.d4[1], clears:Math.max(0, Math.floor(+d.d4[2] || 0))};
   if (Array.isArray(d.kn)) {
     const ep = clamp(Math.floor(+d.kn[0] || 0), 0, QUEST_LAST + 1);
     const prog = (Array.isArray(d.kn[1]) ? d.kn[1] : []).slice(0, 4).map(x => clamp(Math.floor(+x || 0), 0, 9));
     const done = (Array.isArray(d.kn[2]) ? d.kn[2] : []).map(x => Math.floor(+x)).filter(x => x >= 1 && x <= QUEST_LAST && x < ep);
     g.knight = {ep, prog, done:[...new Set(done)], story:0};
   }
-  if (d.hc && typeof d.hc === 'object') { g.heroClears = {kai:{}, tamer:{}}; for (const h of ['kai', 'tamer']) for (const dg of [1, 2]) if (d.hc[h] && d.hc[h][dg]) g.heroClears[h][dg] = Math.max(0, +d.hc[h][dg] || 0); }
+  if (d.hc && typeof d.hc === 'object') { g.heroClears = {kai:{}, tamer:{}}; for (const h of ['kai', 'tamer']) for (const dg of [1, 2, 4]) if (d.hc[h] && d.hc[h][dg]) g.heroClears[h][dg] = Math.max(0, +d.hc[h][dg] || 0); }
   g.pack = items(d.p); g.wh = items(d.w);
   g.train = {}; for (const k in d.tr || {}) if (TRAIN[k]) g.train[k] = TRAIN[k].v;
   const bb = items(d.bb); g.buyback = bb.length ? {items:bb} : null;
   g.best = d.b || 0; g.gateKills = d.gk || 0; g.cleared = !!d.c; g.clears = d.cs || 0;
   if (Array.isArray(d.d2)) g.d2 = {best:d.d2[0] || 0, gateKills:d.d2[1] || 0, cleared:!!d.d2[2], clears:d.d2[3] || 0};
-  g.target = d.tg === 3 && g.d2 && g.d2.cleared ? 3 : d.tg === 2 && g.cleared ? 2 : 1; g.carry = Math.max(0, d.cr || 0);
+  g.target = d.tg === 3 && g.d2 && g.d2.cleared ? 3 : (d.tg === 2 || d.tg === 4) && g.cleared ? d.tg : 1; g.carry = Math.max(0, d.cr || 0);
   if (d.ac && typeof d.ac === 'object') { g.ach = {}; for (const k in d.ac) if (ACH.some(a => a.id === k)) g.ach[k] = (+d.ac[k] || 0) * 1000; }
   if (d.sx && typeof d.sx === 'object') { g.stats = {}; for (const k of ['packs', 'ench', 'mikiriBest', 'oblivion', 'heartKills']) if (d.sx[k]) g.stats[k] = Math.max(0, +d.sx[k] || 0); }
   if (d.ps && typeof d.ps === 'object') { g.preset = {}; for (const k in d.ps) if (CONS[k]) g.preset[k] = clamp(+d.ps[k] || 0, 0, 9); }
   g.dives = d.d || 0; g.deaths = d.dd || 0; g.returns = d.r || 0;
   if (CI_MODE_N[d.cm]) g.ciMode = d.cm;
+  if (d.ni) g.noIssue = true;
   if (Array.isArray(d.td)) g.todon = {met:!!d.td[0], opened:Math.max(0, Math.floor(+d.td[1] || 0))};
   g.ciSeen = {}; for (const k of Array.isArray(d.ci) ? d.ci : []) if (CI_DEF[k]) g.ciSeen[k] = 1;
   g.seen = {}; for (const k of d.s || []) if (HEARTS[k]) g.seen[k] = 1;
@@ -5196,6 +5792,7 @@ function adopt(g) {
   if (G.shop && G.shop.stock && G.shop.stock.length) G.shop.stock = [];
   D = G.dive || null; if (!G.shop) refreshShop();
   restoreLostFav();
+  for (const arr of [G.wh, G.pack]) for (let i = 0; i < arr.length; i++) if (arr[i].k === 'mat' && arr[i].type === 'boxer') { arr[i] = makeFist(); }
 }
 function restoreLostFav() {
   G.fixes = G.fixes || {};
@@ -5236,6 +5833,7 @@ function start(data) {
   if (data && data.G) adopt(data.G);
   else adopt(loadLocal() || newGame());
   if (G.screen !== 'dive' && G.screen !== 'result') { checkAch(); announceAch(); }
+  if (G.patchSeen !== PATCH.id && G.screen === 'town' && !U.sheet) U.sheet = {t:'patch'};
   document.addEventListener('click', onClick);
   document.addEventListener('input', ev => { if (ev.target && ev.target.id === 'spell-in') { U.spellIn = ev.target.value; if (U.spellArmed) { U.spellArmed = false; render(); const ta = document.getElementById('spell-in'); if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); } } } });
   render();
@@ -5262,6 +5860,8 @@ const CI_DEF = {
   clear1:     {big:['始まりの迷宮', '踏破'], fx:'banner', dur:3000},
   clear2:     {big:['黄昏の深淵', '踏破'],   fx:'banner', dur:3000},
   clear3:     {big:['底なしの深層', '初生還'], fx:'banner', dur:3000},
+  clear4:     {big:['試しの地下牢', '踏破'], fx:'banner', dur:3000},
+  boxer:      {name:'名もなき拳闘士', epi:'地下闘技場王者', spr:'boxer', fx:'bout', dur:3600, c:'#6b2a1c'},
   abyssIn:    {line:'ここから先に、底はない', big:['', '底なしの深層'], fx:'title', dur:3800},
 };
 let CI_REDUCE = false;
@@ -5363,6 +5963,9 @@ function buildFx(d, fx, wrap, line) {
       sprs.forEach((s, i) => { const c = document.createElement('img'); c.className = 'ci-p ci-cr'; c.src = sprURL(s, ''); c.alt = ''; c.style.cssText = `--x:${pos[i][0]}%;--y:${pos[i][1]}%;--d:${(.1 + i * .17).toFixed(2)}s`; fx.appendChild(c); });
       break;
     }
+    case 'bout':
+      [[28, 34], [70, 26], [48, 52]].forEach(([x, y], i) => { const p = document.createElement('div'); p.className = 'ci-p ci-hit'; p.style.cssText = `left:${x}%;top:${y}%;--d:${(.3 + i * .45).toFixed(2)}s`; fx.appendChild(p); });
+      break;
     case 'banner':
       ciPart(fx, 'ci-sp', 26, p => { p.style.cssText = `left:${ciR(4, 96)}%;top:${ciR(18, 70)}%;--d:${ciR(0, 1.2).toFixed(2)}s`; });
       break;
@@ -5420,8 +6023,168 @@ function playTodonIntro() {
   });
 }
 
+/* ---------- 音楽と効果音 ----------
+   曲はページの横に置いた mp3 を読み込んで鳴らす。iPhone でも音量を変えられるよう、
+   読み込めた曲は Web Audio を通して鳴らす（読み込めなければ、そのまま鳴らす）。
+   ブラウザの決まりで、最初に画面に触れるまでは鳴らさない。 */
+const BGM = {zako:'bgm/zako.mp3', battle:'bgm/battle.mp3', dragon:'bgm/dragon.mp3', knight:'bgm/knight.mp3',
+  village:'bgm/village.mp3', todon:'bgm/todon.mp3', dg1a:'bgm/dg1a.mp3', dg1b:'bgm/dg1b.mp3', dg2a:'bgm/dg2a.mp3', abyss:'bgm/abyss.mp3', prison:'bgm/prison.mp3'};
+const SE_SRC = {stairs:'bgm/stairs.mp3', win:'bgm/win.mp3'};
+for (const k of ['sword', 'spear', 'axe', 'dagger', 'whip', 'bow', 'fire', 'double', 'punch', 'heart', 'crit', 'break', 'swish', 'shield', 'clash', 'bite', 'bigbite', 'claw', 'crush', 'heavy', 'mon', 'mon2', 'blade', 'fistE', 'fistH', 'magic']) SE_SRC[k] = `bgm/se_${k}.mp3`;
+const TOWN_SCR = {town:1, prep:1, shop:1, smith:1, train:1, buyback:1, kennel:1, dummy:1};
+const BGM_RESTART = {zako:1, battle:1, dragon:1, knight:1};
+const SND_N = ['切', '小', '中', '大'], SND_V = [0, .2, .4, .7];
+const SND = {ctx:null, master:null, unlocked:false, tracks:{}, blobs:{}, key:null, want:null, se:{}, lastDepth:null, lastDive:null, pend:false};
+const sndLv = () => (G && G.snd != null ? G.snd : 2);
+function sndVol() { return SND_V[sndLv()] || 0; }
+function sndCtx() {
+  if (SND.ctx) return SND.ctx;
+  try {
+    const C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
+    SND.ctx = new C(); SND.master = SND.ctx.createGain(); SND.master.gain.value = 1; SND.master.connect(SND.ctx.destination);
+  } catch (e) { SND.ctx = null; }
+  return SND.ctx;
+}
+/* 曲を丸ごと取り寄せ、同じ出どころの blob にしておく（Web Audio に通せるように） */
+function sndBlob(src) {
+  if (!SND.blobs[src]) SND.blobs[src] = fetch(src).then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.blob(); })
+    .then(b => ({url:URL.createObjectURL(b), blob:b})).catch(() => null);
+  return SND.blobs[src];
+}
+function sndTrack(key) {
+  let t = SND.tracks[key]; if (t) return t;
+  t = SND.tracks[key] = {key, a:null, g:null, ready:null, vol:0};
+  t.ready = sndBlob(BGM[key]).then(r => {
+    const a = new Audio(); a.loop = true; a.preload = 'auto';
+    const ctx = sndCtx();
+    if (r && ctx) {
+      a.src = r.url;
+      try { const g = ctx.createGain(); g.gain.value = 0; ctx.createMediaElementSource(a).connect(g); g.connect(SND.master); t.g = g; }
+      catch (e) { t.g = null; }
+    } else a.src = BGM[key];
+    if (!t.g) a.volume = 0;
+    t.a = a; return t;
+  });
+  return t;
+}
+function sndSetVol(t, v) {
+  t.vol = v;
+  if (!t.a) return;
+  if (t.g) t.g.gain.value = v; else { try { t.a.volume = Math.max(0, Math.min(1, v)); } catch (e) {} }
+}
+function sndFade(t, to, ms, done) {
+  clearInterval(t.fadeT);
+  const from = t.vol, t0 = Date.now();
+  if (ms <= 0) { sndSetVol(t, to); if (done) done(); return; }
+  t.fadeT = setInterval(() => {
+    const p = Math.min(1, (Date.now() - t0) / ms);
+    sndSetVol(t, from + (to - from) * p);
+    if (p >= 1) { clearInterval(t.fadeT); if (done) done(); }
+  }, 40);
+}
+function sndPlay(t) {
+  if (!t.a) return;
+  const p = t.a.play();
+  if (p && p.catch) p.catch(() => { SND.pend = true; });
+}
+/* 鳴らしたい曲を切り替える（null なら止める） */
+function bgmTo(key) {
+  SND.want = key;
+  if (!SND.unlocked) return;
+  if (!sndVol()) key = null;
+  if (key === SND.key) return;
+  const old = SND.key ? SND.tracks[SND.key] : null;
+  SND.key = key;
+  if (old) sndFade(old, 0, SND.hold > Date.now() ? 150 : 500, () => { if (SND.key !== old.key && old.a) old.a.pause(); });
+  if (!key) return;
+  const t = sndTrack(key), wait = Math.max(0, (SND.hold || 0) - Date.now());
+  t.ready.then(() => new Promise(ok => setTimeout(ok, wait))).then(() => {
+    if (SND.key !== key) return;
+    if (BGM_RESTART[key] && t.a.paused) { try { t.a.currentTime = 0; } catch (e) {} }
+    sndSetVol(t, 0); sndPlay(t); sndFade(t, sndVol(), old ? 700 : 400);
+  });
+}
+function bgmApplyVol() {
+  if (!SND.unlocked || !SND.key) return;
+  const t = SND.tracks[SND.key]; if (t) sndFade(t, sndVol(), 200);
+}
+function sePrime(k) {
+  const ctx = sndCtx(); if (!ctx) return null;
+  if (!SND.se[k]) SND.se[k] = fetch(SE_SRC[k]).then(r => r.arrayBuffer()).then(b => new Promise((ok, ng) => ctx.decodeAudioData(b, ok, ng))).catch(() => null);
+  return SND.se[k];
+}
+function sePlay(k) {
+  if (!SND.unlocked || !sndVol()) return;
+  const ctx = sndCtx(), src = SE_SRC[k];
+  if (ctx) {
+    sePrime(k).then(buf => {
+      if (!buf) return;
+      const s = ctx.createBufferSource(), g = ctx.createGain(); g.gain.value = Math.min(1, sndVol() * 1.6);
+      s.buffer = buf; s.connect(g); g.connect(SND.master); s.start();
+    });
+  } else { try { const a = new Audio(src); a.volume = Math.min(1, sndVol() * 1.6); a.play().catch(() => {}); } catch (e) {} }
+}
+/* いまの場面に合う曲 */
+function bgmScene() {
+  if (!G) return null;
+  if (G.screen === 'story') return 'knight';
+  if (G.screen === 'todon') return 'todon';
+  if (TOWN_SCR[G.screen]) return 'village';
+  if (G.screen !== 'dive' || !D) return null;
+  const b = D.battle;
+  if (b && D.mode === 'battle' && !b.over) {
+    const fs = b.foes;
+    if (fs.some(f => f.k === 'ghostknight')) return 'knight';
+    if (fs.some(f => f.k === 'dragon' || f.k === 'abyssdragon')) return 'dragon';
+    if (fs.some(f => (f.boss || f.mid || f.special) && !f.minion)) return 'battle';
+    return 'zako';
+  }
+  if (D.scene && D.scene.spr === 'ghostknight') return 'knight';
+  const dg = D.dg || 1;
+  if (dg === 4) return 'prison';
+  if (dg === 3) return 'abyss';
+  if (dg === 2) return 'dg2a';
+  return D.depth > DUNGEONS[1].gate ? 'dg1b' : 'dg1a';
+}
+/* 画面を描くたびに呼ぶ */
+function sndAfterRender() {
+  const dive = G && G.screen === 'dive' && D ? D : null;
+  if (dive && SND.lastDive === dive && SND.lastDepth != null && dive.depth > SND.lastDepth) sePlay('stairs');
+  SND.lastDive = dive; SND.lastDepth = dive ? dive.depth : null;
+  /* 勝ったら勝利の音。鳴り終わるまで、次の曲は待たせる */
+  const won = !!(dive && dive.battle && dive.battle.over && dive.mode === 'win');
+  if (won && SND.lastWon !== dive.battle) { SND.lastWon = dive.battle; SND.hold = Date.now() + 2300; sePlay('win'); }
+  bgmTo(bgmScene());
+  /* 戦闘の効果音：こちらの一撃から順に、少し間をあけて鳴らす */
+  if (typeof SFXQ !== 'undefined' && SFXQ.length) {
+    const q = SFXQ.splice(0);
+    if (SND.unlocked && sndVol()) q.forEach((k, i) => setTimeout(() => sePlay(k), i * 220));
+  }
+}
+function sndUnlock() {
+  if (SND.pend && SND.key) { SND.pend = false; const t = SND.tracks[SND.key]; if (t && t.a) sndPlay(t); }
+  if (SND.unlocked) { if (SND.ctx && SND.ctx.state === 'suspended') SND.ctx.resume().catch(() => {}); return; }
+  SND.unlocked = true;
+  const ctx = sndCtx(); if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => {});
+  bgmTo(SND.want);
+  /* 残りの曲も裏で取り寄せておく（場面が変わったとき、すぐ鳴らせるように） */
+  let i = 0; const ks = Object.keys(BGM);
+  const next = () => { if (i < ks.length) sndBlob(BGM[ks[i++]]).then(() => setTimeout(next, 300)); };
+  setTimeout(next, 1500);
+  for (const k of Object.keys(SE_SRC)) sePrime(k);
+}
+document.addEventListener('pointerdown', sndUnlock, true);
+document.addEventListener('keydown', sndUnlock, true);
+document.addEventListener('visibilitychange', () => {
+  const t = SND.key ? SND.tracks[SND.key] : null;
+  if (!t || !t.a) return;
+  if (document.hidden) t.a.pause(); else sndPlay(t);
+});
+
 /* ---------- 起動 ---------- */
 window.claude?.hot?.snapshot?.(() => ({G}));
 window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
 
 </script>
+
+</body></html>
