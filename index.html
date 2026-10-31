@@ -1840,6 +1840,7 @@ const AFFIX = {
 };
 const CONS = {
   potion:  {n:'回復薬',   spr:'potion',   tint:'red',  price:50,  d:'体力を3割回復する', field:true},
+  oldpotion:{n:'古い回復薬', spr:'potion', tint:'green', price:0, d:'賞味期限が近そうな香りのする回復薬', field:true},
   hipotion:{n:'上回復薬', spr:'potion',   tint:'gold', price:200, d:'体力を7割回復する', field:true},
   herb:    {n:'解毒草',   spr:'herb',                  price:15,  d:'毒を治す（毒では倒れないが、体力が1まで削られる）', field:true},
   smoke:   {n:'煙玉',     spr:'smoke',                 price:45,  d:'戦いから必ず逃げられる（門番と迷宮の主には効かない）'},
@@ -2294,7 +2295,7 @@ const KIND_N = {weapon:'武器', armor:'防具', acc:'装飾品', cons:'道具',
 function itemLines(it) {
   const L = [];
   if (it.loan) L.push('試しの地下牢の入口で借りた装備。帰るときに返す');
-  else if (it.issued) L.push('町の支給品。売っても0金貨');
+  else if (it.issued && it.k !== 'cons') L.push('町の支給品。売っても0金貨');
   if (it.k === 'weapon') {
     const plain = weaponAtk({...it, aff:[], ench:null}), now = weaponAtk(it);
     L.push(now !== plain ? `攻撃 ${now}（付与効果なしなら ${plain}）` : `攻撃 ${now}`);
@@ -2568,6 +2569,11 @@ function startDive(dg = 1) {
     G.load = {weapon:null, armor:null, acc:null, heart:null, heart2:null};
     G.pack = []; G.train = {}; G.buyback = null;
   } else { const a = PRISON.midBoss.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } D.midSeq = a.slice(0, 2); D.midDone = {}; }
+  /* 初心者救済：倉庫に回復薬がなく、持ち込みもしないときは、古い回復薬を1つ渡す（迷宮の中だけの品） */
+  if (!prison && !G.noIssue && ![...G.wh, ...D.bag].some(x => x.k === 'cons' && (x.type === 'potion' || x.type === 'hipotion'))) {
+    const o = makeCons('oldpotion'); o.issued = true; D.bag.push(o);
+    presetMsgs.push('町の支給品として、古い回復薬を1つ受け取った（迷宮の中だけで使える）。');
+  }
   G.dives++;
   const carry = prison ? 0 : clamp(Math.floor(G.carry || 0), 0, G.gold);
   G.gold -= carry; D.gold = carry; D.carried = carry;
@@ -2874,11 +2880,13 @@ function boxPlace(box) {
   const lv = box.lv || 5;
   return lv > 10 ? {dg:2, fl:clamp(lv - 8, 1, 12)} : {dg:1, fl:clamp(lv, 1, 10)};
 }
-/* 確率：[がらくた, そこそこ, 当たり, 大当たり, 伝説]。伝説は始まり2%、黄昏5%、深層は5%から10階ごとに+1%（最大10%）。増減はがらくたで調整 */
+/* 大当たり：竜の鱗1つ＋竜の部位（ランダム）1つ＋古い石像。
+   確率：[がらくた, そこそこ, 当たり, 大当たり, 伝説]。伝説は始まり2%、黄昏5%、深層は5%から10階ごとに+1%（最大10%）。増減はがらくたで調整 */
 function boxOdds(box) {
   const {dg, fl} = boxPlace(box);
   const leg = dg === 1 || dg === 4 ? .02 : dg === 2 ? .05 : Math.min(.10, .05 + .01 * Math.floor(Math.max(0, abyssVD(fl) - DUNGEONS[2].floors) / 4));
-  return [.35 - leg, .30, .22, .13, leg];
+  const big = dg === 1 || dg === 4 ? .10 : .16;  /* 大当たり：始まりは少なめ、黄昏と深層は多め */
+  return [1 - .30 - .22 - big - leg, .30, .22, big, leg];
 }
 /* 当たりの装備：見つけた迷宮と階で質が決まる。武器か防具。呪いは付かない */
 function boxAffixes(on, n) {
@@ -2939,7 +2947,7 @@ function openBox(id) {
   if (r < P[0]) { grade = 'がらくた'; got.push(makeTreasure('junk', 1)); }
   else if (r < P[0] + P[1]) { grade = 'そこそこ'; got.push(randomTreasure(lv), randomTreasure(lv)); }
   else if (r < P[0] + P[1] + P[2]) { grade = '当たり'; got.push(boxGear(box), randomTreasure(lv + 3)); }
-  else if (r < P[0] + P[1] + P[2] + P[3]) { const m = lv >= 21 ? 'abyssdragon' : 'dragon'; grade = '大当たり'; got.push(makeMat(m), makeMat(m), makeTreasure('statue', lv + 6)); }
+  else if (r < P[0] + P[1] + P[2] + P[3]) { const m = lv >= 21 ? 'abyssdragon' : 'dragon'; grade = '大当たり'; got.push(makeMat(m), makeMat(pick(['dfang', 'dclaw', 'dhorn', 'deye', 'dwhisker', 'dlung'])), makeTreasure('statue', lv + 6)); }
   else { grade = '伝説'; got.push(makeRare('oblivion'), makeTreasure('cup', lv + 15), makeTreasure('statue', lv + 15)); }
   G.wh.push(...got);
   G.news = `黄金の重い箱を開けた。【${grade}】${got.map(itemName).join('、')}`;
@@ -3133,7 +3141,8 @@ function merchantRich() {
   const worth = D.gold + D.bag.filter(x => x.k === 'treasure').reduce((s, x) => s + merchantPrice(x), 0);
   return worth >= ED() * MERCH_RICH.per + MERCH_RICH.base;
 }
-function merchantCanSell(it) { return !it.fav && !it.issued && !(it.k === 'rare' && (RARES[it.type].quest || RARES[it.type].box)); }
+const isOldPotion = it => !!it && it.k === 'cons' && it.type === 'oldpotion';
+function merchantCanSell(it) { return !it.fav && !it.issued && !isOldPotion(it) && !(it.k === 'rare' && (RARES[it.type].quest || RARES[it.type].box)); }
 function merchantPrice(it) { return Math.max(1, Math.round(sellPrice(it) * MERCHANT_RATE)); }
 function merchantSell(id, all) {
   if (!D || D.mode !== 'merchant') return;
@@ -3217,6 +3226,7 @@ function useField(it, L) {
   const S = pst();
   switch (it.type) {
     case 'potion': { if (D.track) D.track.potion = true; const h = Math.round(S.maxHp * .3); D.hp = Math.min(S.maxHp, D.hp + h); L.push(`回復薬を飲んだ。体力が${h}回復した。`); break; }
+    case 'oldpotion': { if (D.track) D.track.potion = true; const h = Math.round(S.maxHp * .3); D.hp = Math.min(S.maxHp, D.hp + h); L.push(`古い回復薬を飲んだ。体力が${h}回復した。`); break; }
     case 'hipotion': { if (D.track) D.track.potion = true; const h = Math.round(S.maxHp * .7); D.hp = Math.min(S.maxHp, D.hp + h); L.push(`上回復薬を飲んだ。体力が${h}回復した。`); break; }
     case 'herb': D.poison = 0; L.push('解毒草を噛んだ。毒が消えた。'); break;
     case 'incense': D.kehai = Math.max(0, D.kehai - 40); L.push('静寂の香を焚いた。気配が大きく下がった。'); break;
@@ -3674,7 +3684,7 @@ function resolveTurn(sk) {
       const wm = witchMinions(T); if (wm) dmg *= 1 - Math.min(WITCH.shieldMax, WITCH.shield * wm);
       if (sk.execute && T.hp <= T.maxHp * sk.execute) { dmg *= 2; blog(`${T.name}の弱みを突いた！`); }
       dmg = Math.max(1, Math.round(dmg));
-      const fire = S.fire && !sk.magic ? Math.max(1, Math.round(S.fire * fireMul(T))) : 0;
+      const fire = S.fire && !sk.magic ? Math.max(1, Math.round(S.fire * fireMul(T))) * (sk.hits || 1) : 0;
       T.hp -= dmg + fire; b.fx.enemyHit = true; sfx(playerSfx(sk)); if (crit) sfx('crit');
       blog(`${mik ? '見切った！ ' : ''}${sk.n}！${crit ? ' 急所に当たった！' : ''} ${T.name}に${sk.hits ? `${sk.hits}発で` : ''}${dmg}${fire ? `＋炎${fire}` : ''}の傷。${sk.el === 'fire' || fire ? fireNote(T) : ''}${wm ? `（手下が庇っている：傷−${Math.round(Math.min(WITCH.shieldMax, WITCH.shield * wm) * 100)}%）` : ''}`);
       if (S.chase && T.hp > 0 && chance(S.chase)) {
@@ -4292,7 +4302,7 @@ function abyssRecord(sc, type) {
 }
 function finishDive(type) {
   const abyss = D.dg === 3 ? abyssScore() : null;
-  const prison = D.dg === 4, notLoan = it => !it.loan;
+  const prison = D.dg === 4, notLoan = it => !it.loan && !isOldPotion(it);  /* 古い回復薬は村に戻るときに消える */
   const items = D.bag.concat(D.pending).filter(notLoan);
   for (const it of collect(D)) delete it.b;
   G.gold += D.gold;
@@ -4342,7 +4352,7 @@ function finishDive(type) {
 }
 function die(why) {
   if (D.battle) D.battle.over = true;
-  const lostAll = collect(D).concat(D.pending).filter(it => !it.loan);
+  const lostAll = collect(D).concat(D.pending).filter(it => !it.loan && !isOldPotion(it));
   const brought = lostAll.filter(it => it.b && slotOf(it));
   const keepBB = D.dg === 4 ? G.buyback : null;
   G.deaths++;
@@ -5155,13 +5165,13 @@ function vDive() {
 function quickBar(S) {
   const counts = {};
   for (const it of D.bag) if (it.k === 'cons') counts[it.type] = (counts[it.type] || 0) + 1;
-  const types = PRESET_ORDER.filter(k => counts[k]);
+  const types = ['potion', 'oldpotion', ...PRESET_ORDER.slice(1)].filter(k => counts[k]);
   if (!types.length) return `<div class="qbar empty"><span class="muted small">使える道具を持っていない</span></div>`;
   const battle = D.mode === 'battle' && D.battle && !D.battle.over;
   const field = D.mode === 'floor' || D.mode === 'retreat';
   const btns = types.map(k => {
     let ok = battle || (field && CONS[k].field), why = '';
-    if (ok && (k === 'potion' || k === 'hipotion') && D.hp >= S.maxHp) { ok = false; why = '体力は満タン'; }
+    if (ok && (k === 'potion' || k === 'oldpotion' || k === 'hipotion') && D.hp >= S.maxHp) { ok = false; why = '体力は満タン'; }
     if (ok && k === 'herb' && !D.poison) { ok = false; why = '毒ではない'; }
     if (ok && k === 'incense' && D.kehai <= 0) { ok = false; why = '気配はない'; }
     if (!battle && !CONS[k].field) why = '戦闘中に使う';
